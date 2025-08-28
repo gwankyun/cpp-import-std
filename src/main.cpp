@@ -1,13 +1,24 @@
 ﻿module;
-#include <spdlog/spdlog.h>
+// 此處引入頭文件
 
 module main;
 import std;
 
+std::string compiler_name()
+{
+#ifdef _MSC_VER
+    return "MSVC";
+#elif defined(__clang__)
+    return "Clang";
+#elif defined(__GNUC__)
+    return "GCC";
+#else
+    return "Other";
+#endif
+}
+
 int main(int _argc, char* _argv[])
 {
-    spdlog::set_pattern("[%C-%m-%d %T.%e] [%-8!!:%4#] %v");
-    std::println("use std mdoule");
-    SPDLOG_INFO("use spdlog");
+    std::println("Use std module on {}", compiler_name());
     return 0;
 }

@@ -2,20 +2,13 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "vcpkg",
-            "binaryDir": "${sourceDir}/build",
-            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-        },
-        {
             "name": "vs2022",
             "generator": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/build/msvc",
-            "inherits": "vcpkg"
+            "binaryDir": "${sourceDir}/build/msvc"
         },
         {
             "name": "clang",
-            "generator": "Ninja Multi-Config",
-            "inherits": "vcpkg"
+            "generator": "Ninja Multi-Config"
         },
         {
             "name": "clang-mingw",
@@ -23,9 +16,7 @@
             "binaryDir": "${sourceDir}/build/clang-mingw",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "C:/local/llvm-mingw/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/local/llvm-mingw/bin/clang++.exe",
-                "VCPKG_OVERLAY_TRIPLETS": "C:/local/vcpkg-custom-triplets",
-                "VCPKG_TARGET_TRIPLET": "x64-mingw-clang-static"
+                "CMAKE_CXX_COMPILER": "C:/local/llvm-mingw/bin/clang++.exe"
             }
         }
     ],
