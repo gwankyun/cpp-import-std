@@ -33,9 +33,10 @@ enable_module_std(ON)
 add_executable(main)
 target_sources(main
   PRIVATE FILE_SET CXX_MODULES FILES
-  src/main.ixx
+  src/compiler.ixx
   PRIVATE
   src/main.cpp
+  src/compiler.cpp
 )
 target_compile_features(main PRIVATE cxx_std_23)
 
