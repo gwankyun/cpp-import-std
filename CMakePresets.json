@@ -1,34 +1,46 @@
 {
-    "version": 3,
+    "version": 10,
     "configurePresets": [
         {
-            "name": "vs2022",
-            "generator": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/build/msvc"
+            "name": "base",
+            "hidden": true,
+            "$comment": "基礎預設",
+            "binaryDir": "${sourceDir}/build/${presetName}"
         },
         {
-            "name": "clang",
-            "generator": "Ninja Multi-Config"
+            "name": "msvc",
+            "$comment": "模塊需要VS2022",
+            "description": "Visual Studio 17 2022",
+            "inherits": "base",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "ninja",
+            "hidden": true,
+            "inherits": "base",
+            "generator": "Ninja Multi-Config",
+            "$comment": "clang需要指定ninja生成器"
         },
         {
             "name": "clang-mingw",
-            "inherits": "clang",
-            "binaryDir": "${sourceDir}/build/clang-mingw",
+            "inherits": "ninja",
+            "description": "Clang-MinGW",
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "C:/local/llvm-mingw/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/local/llvm-mingw/bin/clang++.exe"
+                "$comment": "指定編譯器路徑",
+                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "vs2022-debug",
-            "configurePreset": "vs2022",
+            "name": "msvc-debug",
+            "configurePreset": "msvc",
             "configuration": "Debug"
         },
         {
-            "name": "vs2022",
-            "configurePreset": "vs2022",
+            "name": "msvc",
+            "configurePreset": "msvc",
             "configuration": "Release"
         },
         {
