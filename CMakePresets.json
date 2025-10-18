@@ -1,4 +1,4 @@
-{
+﻿{
     "version": 10,
     "configurePresets": [
         {
@@ -7,6 +7,12 @@
             "description": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/build/msvc",
             "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "msvc18",
+            "description": "Visual Studio 18 2026",
+            "binaryDir": "${sourceDir}/build/msvc18",
+            "generator": "Visual Studio 18 2026"
         },
         {
             "name": "ninja",
@@ -30,6 +36,11 @@
         {
             "name": "msvc",
             "configurePreset": "msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "msvc18",
+            "configurePreset": "msvc18",
             "configuration": "Release"
         },
         {
