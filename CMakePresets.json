@@ -28,7 +28,8 @@
             "cacheVariables": {
                 "$comment": "指定編譯器路徑",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
             }
         }
     ],

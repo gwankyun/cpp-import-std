@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 4.2) # C++20模塊支持
 
 # CMake對Clang的import std;支持還在試驗階段
-# 需要設置此UUID，以下值衹保證在[4.1.0, 4.2.0-rc1]有效
+# 需要設置此UUID，以下值衹保證在[4.1.0, 4.2.0-rc2]有效
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444"
   CACHE STRING "UUID for import std")
 
