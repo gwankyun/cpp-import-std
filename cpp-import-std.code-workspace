@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"C_Cpp.intelliSenseEngine": "Disabled",
+		"C_Cpp.intelliSenseEngine": "disabled",
 		"C_Cpp.autocomplete": "disabled",
 		"C_Cpp.errorSquiggles": "disabled",
 		"clangd.path": "${env:LLVM_MINGW_ROOT}/bin/clangd.exe",

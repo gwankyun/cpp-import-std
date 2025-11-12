@@ -1,5 +1,5 @@
 ﻿import std;
-import compiler.mod;
+import compiler;
 
 int main(int _argc, char* _argv[])
 {

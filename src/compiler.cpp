@@ -1,4 +1,5 @@
-﻿module compiler.mod; // 注意這裡無export
+﻿module compiler; // 注意這裡無export
+import std;
 
 namespace compiler
 {
