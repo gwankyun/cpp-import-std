@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 4.0) # C++20模塊支持
 set(uuid "")
 
 # CMake對Clang的import std;支持還在試驗階段
-# 需要設置此UUID，以下值衹保證在[4.1.0, 4.2.0-rc2]有效
+# 需要設置此UUID
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.1.0")
-  set(uuid "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+  set(uuid "d0edc3af-4c50-42ea-a356-e2862fe7a444") # 衹保證在[4.1.0, 4.2.0-rc3]有效
+elseif(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0" AND CMAKE_VERSION VERSION_LESS "4.1.0")
+  set(uuid "a9e1cf81-9932-4810-974b-6eccaf14e457") # [4.0.0, 4.1.0)有效
 else()
-  set(uuid "a9e1cf81-9932-4810-974b-6eccaf14e457")
+  message(FATAL_ERROR "CMAKE_VERSION ${CMAKE_VERSION} not supported")
 endif()
 
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${uuid}
