@@ -9,7 +9,16 @@
 		"C_Cpp.autocomplete": "disabled",
 		"C_Cpp.errorSquiggles": "disabled",
 		"clangd.path": "${env:LLVM_MINGW_ROOT}/bin/clangd.exe",
+		"clangd.arguments": [
+			"--compile-commands-dir=${workspaceFolder}/build/clang-mingw",
+			"--query-driver=${env:LLVM_MINGW_ROOT}/bin/clang++.exe",
+			"--header-insertion=never",
+			"--pretty",
+			"--log=verbose",
+			"--experimental-modules-support"
+		],
 		"files.associations": {
+			"*.ixx": "cpp",
 			"*.cppm": "cpp",
 			"print": "cpp",
 			"algorithm": "cpp",
