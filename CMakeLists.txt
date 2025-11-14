@@ -29,12 +29,10 @@ project(cpp_import_std
   DESCRIPTION "在msvc及clang下使用import std;"
 )
 
-# generate_clangd_config enable_module_std target_enable_module_std
-include(cmake/clang.cmake)
+# enable_module_std target_enable_module_std
+include(cmake/std_module.cmake)
 
-# 調用函數生成.clangd配置文件
-generate_clangd_config(std std.compat compiler)
-
+# 全局启用標準庫模塊
 enable_module_std(ON)
 
 # 添加庫
@@ -62,5 +60,12 @@ target_compile_features(main PRIVATE cxx_std_23)
 # 按目標不啟用標準庫模塊，取消下行注释在Clang下就會報fatal error: module 'std' not found
 # target_enable_module_std(main OFF)
 
-# 在main生成後複製.clangd配置文件到項目根目錄
-copy_clangd_config(main)
+# 生成.clangd配置文件
+add_custom_target(generate_clangd
+  COMMAND ${CMAKE_COMMAND}
+    -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+    -DBINARY_DIR=${CMAKE_BINARY_DIR}
+    -DCONFIG=$<CONFIG>
+    -P ${CMAKE_SOURCE_DIR}/cmake/generate_clangd.cmake
+  COMMENT "生成.clangd配置文件"
+)

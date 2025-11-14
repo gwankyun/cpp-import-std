@@ -2,16 +2,16 @@
     "version": 10,
     "configurePresets": [
         {
-            "name": "msvc",
+            "name": "msvc17",
             "$comment": "模塊需要VS2022",
             "description": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/build/msvc",
+            "binaryDir": "${sourceDir}/build/msvc17",
             "generator": "Visual Studio 17 2022"
         },
         {
-            "name": "msvc18",
+            "name": "msvc",
             "description": "Visual Studio 18 2026",
-            "binaryDir": "${sourceDir}/build/msvc18",
+            "binaryDir": "${sourceDir}/build/msvc",
             "generator": "Visual Studio 18 2026"
         },
         {
@@ -35,13 +35,13 @@
     ],
     "buildPresets": [
         {
-            "name": "msvc",
-            "configurePreset": "msvc",
+            "name": "msvc17",
+            "configurePreset": "msvc17",
             "configuration": "Release"
         },
         {
-            "name": "msvc18",
-            "configurePreset": "msvc18",
+            "name": "msvc",
+            "configurePreset": "msvc",
             "configuration": "Release"
         },
         {
