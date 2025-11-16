@@ -2,14 +2,13 @@ message(STATUS "CMAKE_SOURCE_DIR: ${SOURCE_DIR}")
 message(STATUS "CMAKE_BINARY_DIR: ${BINARY_DIR}")
 message(STATUS "CONFIG: ${CONFIG}")
 
-set(clang_d
-      "CompileFlags:\n"
-      "  CompilationDatabase: build/clang-mingw\n"
-      "  Add:\n"
-      "    - -xc++\n"
-      "    - -std=c++23\n"
-      "    - -stdlib=libc++\n"
-    )
+set(clang_d "")
+string(APPEND clang_d "CompileFlags:\n")
+string(APPEND clang_d "  CompilationDatabase: build/clang-mingw\n")
+string(APPEND clang_d "  Add:\n")
+string(APPEND clang_d "    - -xc++\n")
+string(APPEND clang_d "    - -std=c++23\n")
+string(APPEND clang_d "    - -stdlib=libc++\n")
 
 # 查找${CONFIG}配置下的所有.pcm文件
 file(GLOB_RECURSE pcm_file_list

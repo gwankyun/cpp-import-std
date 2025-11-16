@@ -1,6 +1,10 @@
 ﻿# cmake版本
 cmake_minimum_required(VERSION 4.0) # C++20模塊支持
 
+include(CMakePrintHelpers)
+
+cmake_print_variables(CMAKE_VERSION)
+
 set(uuid "")
 
 # CMake對Clang的import std;支持還在試驗階段
@@ -30,7 +34,7 @@ project(cpp_import_std
 )
 
 # enable_module_std target_enable_module_std
-include(cmake/std_module.cmake)
+include(cmake/module_std.cmake)
 
 # 全局启用標準庫模塊
 enable_module_std(ON)
