@@ -10,7 +10,7 @@ set(uuid "")
 # CMake對Clang的import std;支持還在試驗階段
 # 需要設置此UUID
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.1.0")
-  set(uuid "d0edc3af-4c50-42ea-a356-e2862fe7a444") # 衹保證在[4.1.0, 4.2.0-rc3]有效
+  set(uuid "d0edc3af-4c50-42ea-a356-e2862fe7a444") # 衹保證在[4.1.0, 4.2.0]有效
 elseif(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0" AND CMAKE_VERSION VERSION_LESS "4.1.0")
   set(uuid "a9e1cf81-9932-4810-974b-6eccaf14e457") # [4.0.0, 4.1.0)有效
 else()
@@ -20,7 +20,7 @@ endif()
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${uuid}
   CACHE STRING "UUID for import std")
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
@@ -65,11 +65,13 @@ target_compile_features(main PRIVATE cxx_std_23)
 # target_enable_module_std(main OFF)
 
 # 生成.clangd配置文件
-add_custom_target(generate_clangd
-  COMMAND ${CMAKE_COMMAND}
-    -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
-    -DBINARY_DIR=${CMAKE_BINARY_DIR}
-    -DCONFIG=$<CONFIG>
-    -P ${CMAKE_SOURCE_DIR}/cmake/generate_clangd.cmake
-  COMMENT "生成.clangd配置文件"
-)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  add_custom_target(generate_clangd
+    COMMAND ${CMAKE_COMMAND}
+      -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+      -DBINARY_DIR=${CMAKE_BINARY_DIR}
+      -DCONFIG=$<CONFIG>
+      -P ${CMAKE_SOURCE_DIR}/cmake/generate_clangd.cmake
+    COMMENT "生成.clangd配置文件"
+  )
+endif()
