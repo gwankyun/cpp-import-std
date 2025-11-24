@@ -1,23 +1,19 @@
 ﻿# cmake版本
-cmake_minimum_required(VERSION 4.0) # C++20模塊支持
+cmake_minimum_required(VERSION 3.30) # std模塊支持
 
 include(CMakePrintHelpers)
 
 cmake_print_variables(CMAKE_VERSION)
 
-set(uuid "")
+# get_import_std enable_module_std target_enable_module_std
+include(cmake/cxx_module.cmake)
 
 # CMake對Clang的import std;支持還在試驗階段
 # 需要設置此UUID
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.1.0")
-  set(uuid "d0edc3af-4c50-42ea-a356-e2862fe7a444") # 衹保證在[4.1.0, 4.2.0]有效
-elseif(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0" AND CMAKE_VERSION VERSION_LESS "4.1.0")
-  set(uuid "a9e1cf81-9932-4810-974b-6eccaf14e457") # [4.0.0, 4.1.0)有效
-else()
-  message(FATAL_ERROR "CMAKE_VERSION ${CMAKE_VERSION} not supported")
-endif()
+get_import_std(import_std_uuid)
+cmake_print_variables(import_std_uuid)
 
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${uuid}
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid}
   CACHE STRING "UUID for import std")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -32,9 +28,6 @@ project(cpp_import_std
   VERSION 0.1.0 # 版本
   DESCRIPTION "在msvc及clang下使用import std;"
 )
-
-# enable_module_std target_enable_module_std
-include(cmake/module_std.cmake)
 
 # 全局启用標準庫模塊
 enable_module_std(ON)
