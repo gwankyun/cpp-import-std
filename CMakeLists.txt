@@ -61,9 +61,9 @@ target_compile_features(main PRIVATE cxx_std_23)
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   add_custom_target(generate_clangd
     COMMAND ${CMAKE_COMMAND}
-      -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
-      -DBINARY_DIR=${CMAKE_BINARY_DIR}
-      -DCONFIG=$<CONFIG>
+      -D SOURCE_DIR=${CMAKE_SOURCE_DIR}
+      -D BINARY_DIR=${CMAKE_BINARY_DIR}
+      -D CONFIG=$<CONFIG>
       -P ${CMAKE_SOURCE_DIR}/cmake/generate_clangd.cmake
     COMMENT "生成.clangd配置文件"
   )
