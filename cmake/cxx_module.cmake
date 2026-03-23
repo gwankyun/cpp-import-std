@@ -23,10 +23,13 @@ function(get_import_std result)
   set(import_std_330 "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
   set(import_std_400 "a9e1cf81-9932-4810-974b-6eccaf14e457")
   set(import_std_410 "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+  set(import_std_430 "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
   set(ver ${CMAKE_VERSION})
-  if(${ver} VERSION_GREATER_EQUAL "4.3.0")                                      # >= 4.3.0
+  if(${ver} VERSION_GREATER_EQUAL "4.4.0")                                      # >= 4.4.0
     message(WARNING "CMAKE_VERSION ${ver} not tested")
-    set(uuid "${import_std_410}")
+    set(uuid "${import_std_430}")
+  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0" AND ${ver} VERSION_LESS "4.4.0")  # >= 4.3.0  && < 4.4.0
+    set(uuid "${import_std_430}")
   elseif(${ver} VERSION_GREATER_EQUAL "4.1.0" AND ${ver} VERSION_LESS "4.3.0")  # >= 4.1.0  && < 4.3.0
     set(uuid "${import_std_410}") # 衹保證在[4.1.0, 4.2.0]有效
   elseif(${ver} VERSION_GREATER_EQUAL "4.0.0" AND ${ver} VERSION_LESS "4.1.0")  # >= 4.0.0  && < 4.1.0

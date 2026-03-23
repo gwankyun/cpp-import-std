@@ -8,7 +8,8 @@ cmake_print_variables(CMAKE_VERSION)
 # get_import_std enable_module_std target_enable_module_std
 include(cmake/cxx_module.cmake)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+# CMAKE_CXX_COMPILER_ID此時未有效
+if(CMAKE_CXX_COMPILER MATCHES ".*clang\\+\\+") 
   # CMake對Clang的import std;支持還在試驗階段
   # 需要設置此UUID
   get_import_std(import_std_uuid)
