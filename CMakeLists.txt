@@ -8,18 +8,13 @@ cmake_print_variables(CMAKE_VERSION)
 # get_import_std enable_module_std target_enable_module_std
 include(cmake/cxx_module.cmake)
 
-# CMAKE_CXX_COMPILER_ID此時未有效
-if(CMAKE_CXX_COMPILER MATCHES ".*clang\\+\\+") 
-  # CMake對Clang的import std;支持還在試驗階段
-  # 需要設置此UUID
-  get_import_std(import_std_uuid)
-  cmake_print_variables(import_std_uuid)
+# CMake對Clang的import std;支持還在試驗階段
+# 需要設置此UUID
+get_import_std(import_std_uuid)
+cmake_print_variables(import_std_uuid)
 
-  set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid}
-    CACHE STRING "UUID for import std")
-
-  set(CMAKE_CXX_EXTENSIONS OFF)
-endif()
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid}
+  CACHE STRING "UUID for import std")
 
 # 項目名
 project(cpp_import_std

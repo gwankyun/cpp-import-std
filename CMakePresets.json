@@ -18,9 +18,8 @@
             "inherits": "base",
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-mingw-clang-static",
-                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
+                "CMAKE_C_COMPILER": "$penv{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$penv{LLVM_MINGW_ROOT}/bin/clang++.exe"
             },
             "environment": {
                 "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
