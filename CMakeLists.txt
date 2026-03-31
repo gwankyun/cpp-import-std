@@ -4,21 +4,23 @@ cmake_minimum_required(VERSION 3.30) # std模塊支持
 include(CMakePrintHelpers)
 
 cmake_print_variables(CMAKE_VERSION)
+cmake_print_variables(USE_IMPORT_STD_UUID)
 
 # get_import_std enable_module_std target_enable_module_std
 include(cmake/cxx_module.cmake)
-
+ 
 # CMake對Clang的import std;支持還在試驗階段
-# 需要設置此UUID
-get_import_std(import_std_uuid)
-cmake_print_variables(import_std_uuid)
+if(USE_IMPORT_STD_UUID STREQUAL "TRUE")
+  # 需要設置此UUID
+  get_import_std(import_std_uuid)
+  cmake_print_variables(import_std_uuid)
 
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid}
-  CACHE STRING "UUID for import std")
+  set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid}
+    CACHE STRING "UUID for import std")
+endif()
 
 # 項目名
 project(cpp_import_std
-
   # 以下屬性皆可選
   LANGUAGES CXX # 指定C++可以跳過C編譯器檢測
   VERSION 0.1.0 # 版本

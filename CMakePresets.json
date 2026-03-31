@@ -4,7 +4,10 @@
         {
             "name": "base",
             "hidden": true,
-            "binaryDir": "${sourceDir}/build/${presetName}"
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "USE_IMPORT_STD_UUID": "FALSE"
+            }
         },
         {
             "name": "msvc",
@@ -18,8 +21,9 @@
             "inherits": "base",
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "$penv{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$penv{LLVM_MINGW_ROOT}/bin/clang++.exe"
+                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
+                "USE_IMPORT_STD_UUID": "TRUE"
             },
             "environment": {
                 "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
