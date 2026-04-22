@@ -1,0 +1,5 @@
+﻿#pragma once
+
+// 編譯器信息
+#define CXX_COMPILER_ID      "@CMAKE_CXX_COMPILER_ID@"
+#define CXX_COMPILER_VERSION "@CMAKE_CXX_COMPILER_VERSION@"

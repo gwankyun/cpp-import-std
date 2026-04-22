@@ -3,5 +3,6 @@ import std;
 
 export namespace compiler
 {
-    std::string name();
+    std::string id();
+    std::string version();
 }

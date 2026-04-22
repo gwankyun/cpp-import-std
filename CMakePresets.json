@@ -17,7 +17,7 @@
             "architecture": "x64"
         },
         {
-            "name": "clang-mingw",
+            "name": "clang",
             "inherits": "base",
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
@@ -37,8 +37,8 @@
             "configuration": "Release"
         },
         {
-            "name": "clang-mingw",
-            "configurePreset": "clang-mingw",
+            "name": "clang",
+            "configurePreset": "clang",
             "configuration": "Release"
         }
     ]
