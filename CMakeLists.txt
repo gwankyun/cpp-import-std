@@ -53,13 +53,28 @@ target_compile_features(main PRIVATE cxx_std_23)
 # 按目標不啟用標準庫模塊，取消下行注释在Clang下就會報fatal error: module 'std' not found
 # target_enable_module_std(main OFF)
 
-include(cmake/clang.cmake) # clang_copy_dll
+include(cmake/target_copy_files.cmake) # target_copy_files
+include(cmake/clang.cmake) # clang_generate_clangd
 
-# 使用 clang 編譯器
+# 使用 clang 編譯器()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  # 複製 libc++.dll 和 libunwind.dll 到構建目錄
-  clang_copy_dll("$ENV{LLVM_MINGW_ROOT}/bin" main)
+  # 複製運行時所需動態庫
+  cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
+
+  set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
+
+  target_copy_files(
+    TARGET main
+    FILES "${dll_files}"
+  )
 
   # 生成.clangd配置文件
   clang_generate_clangd(generate_clangd)
 endif()
+
+# 啟用測試
+enable_testing()
+include(CTest)
+
+# main返回0就是成功
+add_test(NAME tests COMMAND main)
