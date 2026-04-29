@@ -13,6 +13,9 @@
   message(DEBUG "target: ${target}")
   message(DEBUG "files: ${files}")
 
+  cmake_language(GET_MESSAGE_LOG_LEVEL log_level)
+  message(DEBUG "log_level: ${log_level}")
+
   # gersemi: off
   add_custom_command(
     TARGET ${target}
@@ -21,6 +24,7 @@
       ${CMAKE_COMMAND}
       -D src_files=[==[${files}]==]
       -D dest_dir="$<TARGET_FILE_DIR:${target}>"
+      -D CMAKE_MESSAGE_LOG_LEVEL="${log_level}"
       -P "${CMAKE_SOURCE_DIR}/cmake/target_copy_files_impl.cmake"
     COMMENT ""
   )
