@@ -10,6 +10,16 @@
             }
         },
         {
+            "name": "ninja",
+            "inherits": "base",
+            "hidden": true,
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "USE_IMPORT_STD_UUID": "TRUE"
+            }
+        },
+        {
             "name": "msvc",
             "inherits": "base",
             "description": "Visual Studio 18 2026",
@@ -18,12 +28,10 @@
         },
         {
             "name": "clang",
-            "inherits": "base",
-            "generator": "Ninja Multi-Config",
+            "inherits": "ninja",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
-                "USE_IMPORT_STD_UUID": "TRUE"
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
             },
             "environment": {
                 "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
