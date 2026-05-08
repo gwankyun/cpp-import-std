@@ -1,6 +1,6 @@
 ﻿set(compiler_info_h "${CMAKE_BINARY_DIR}/compiler_info.h")
 
-# gersemi: off          
+# gersemi: off
 configure_file(
   src/compiler_info.h.in # 輸入模板文件
   "${compiler_info_h}"   # 輸出文件
@@ -21,8 +21,10 @@ target_sources(
   PRIVATE
     src/compiler.cpp # 模塊實現單元
   PRIVATE
-    FILE_SET HEADERS
+    FILE_SET
+      HEADERS #
       BASE_DIRS ${CMAKE_BINARY_DIR}
       FILES "${compiler_info_h}"
 )
 target_compile_features(compiler PRIVATE cxx_std_23)
+target_link_libraries(compiler PRIVATE import_std_option)

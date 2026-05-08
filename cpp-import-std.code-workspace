@@ -8,6 +8,7 @@
         "C_Cpp.intelliSenseEngine": "disabled",
         "C_Cpp.autocomplete": "disabled",
         "C_Cpp.errorSquiggles": "disabled",
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
         "clangd.path": "${env:LLVM_MINGW_ROOT}/bin/clangd.exe",
         "clangd.arguments": [
             "--compile-commands-dir=${workspaceFolder}/build/clang",

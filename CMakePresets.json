@@ -6,7 +6,8 @@
             "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
-                "USE_IMPORT_STD_UUID": "FALSE"
+                "USE_IMPORT_STD_UUID": "ON",
+                "USE_IMPORT_STD": "ON"
             }
         },
         {
@@ -16,7 +17,7 @@
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "USE_IMPORT_STD_UUID": "TRUE"
+                "USE_IMPORT_STD_UUID": "ON"
             }
         },
         {
@@ -24,17 +25,28 @@
             "inherits": "base",
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
-            "architecture": "x64"
+            "architecture": "x64",
+            "cacheVariables": {
+                "USE_IMPORT_STD_UUID": "OFF"
+            }
         },
         {
             "name": "clang",
             "inherits": "ninja",
+            "toolchainFile": "${sourceDir}/toolchainFile/clang.cmake",
+            "environment": {
+                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+            }
+        },
+        {
+            "name": "gcc",
+            "inherits": "ninja",
+            "toolchainFile": "${sourceDir}/toolchainFile/gcc.cmake",
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
+                "USE_IMPORT_STD": "OFF"
             },
             "environment": {
-                "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
             }
         }
     ],
@@ -45,19 +57,14 @@
             "configuration": "Debug"
         },
         {
-            "name": "msvc-release",
-            "configurePreset": "msvc",
-            "configuration": "Release"
-        },
-        {
             "name": "clang",
             "configurePreset": "clang",
             "configuration": "Debug"
         },
         {
-            "name": "clang-release",
-            "configurePreset": "clang",
-            "configuration": "Release"
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
         }
     ],
     "testPresets": [
@@ -67,19 +74,14 @@
             "configuration": "Debug"
         },
         {
-            "name": "msvc-release",
-            "configurePreset": "msvc",
-            "configuration": "Release"
-        },
-        {
             "name": "clang",
             "configurePreset": "clang",
             "configuration": "Debug"
         },
         {
-            "name": "clang-release",
-            "configurePreset": "clang",
-            "configuration": "Release"
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
         }
     ]
 }

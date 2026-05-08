@@ -10,7 +10,7 @@ cmake_print_variables(USE_IMPORT_STD_UUID)
 include(cmake/cxx_module.cmake)
 
 # CMake對Clang的import std;支持還在試驗階段
-if(USE_IMPORT_STD_UUID STREQUAL "TRUE")
+if(USE_IMPORT_STD_UUID STREQUAL "ON")
   # 需要設置此UUID
   get_import_std(import_std_uuid)
   cmake_print_variables(import_std_uuid)
@@ -37,6 +37,14 @@ project(
 # 全局启用標準庫模塊
 enable_module_std(ON)
 
+cmake_print_variables(USE_IMPORT_STD)
+
+add_library(import_std_option INTERFACE)
+target_compile_definitions(
+  import_std_option
+  INTERFACE USE_IMPORT_STD=$<BOOL:${USE_IMPORT_STD}>
+)
+
 # 添加庫
 add_subdirectory(compiler)
 
@@ -47,7 +55,7 @@ target_sources(
   PRIVATE #
     src/main.cpp
 )
-target_link_libraries(main PRIVATE compiler) # 鏈接compiler庫
+target_link_libraries(main PRIVATE compiler import_std_option) # 鏈接compiler庫
 target_compile_features(main PRIVATE cxx_std_23)
 
 # 按目標不啟用標準庫模塊，取消下行注释在Clang下就會報fatal error: module 'std' not found
@@ -56,21 +64,37 @@ target_compile_features(main PRIVATE cxx_std_23)
 include(cmake/target_copy_files.cmake) # target_copy_files
 include(cmake/clang.cmake) # clang_generate_clangd
 
+set(files "")
+
+include(cmake/target_copy_files.cmake) # target_copy_files
+
 # 使用 clang 編譯器()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  # 複製運行時所需動態庫
   cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
 
   set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
 
-  target_copy_files(
-    TARGET main
-    FILES "${dll_files}"
+  list(APPEND files "${dll_files}")
+endif()
+
+# 使用 gcc 編譯器
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  cmake_path(SET gcc_bin NORMALIZE "$ENV{MINGW64_ROOT}/bin")
+
+  set(
+    dll_files
+    "${gcc_bin}/libgcc_s_seh-1.dll"
+    "${gcc_bin}/libstdc++-6.dll"
+    "${gcc_bin}/libwinpthread-1.dll"
   )
 
-  # 生成.clangd配置文件
-  clang_generate_clangd(generate_clangd)
+  list(APPEND files "${dll_files}")
 endif()
+
+target_copy_files(
+  TARGET main
+  FILES "${files}"
+)
 
 # 啟用測試
 enable_testing()
