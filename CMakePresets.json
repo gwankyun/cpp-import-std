@@ -36,6 +36,9 @@
             "toolchainFile": "${sourceDir}/toolchainFile/clang.cmake",
             "environment": {
                 "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+            },
+            "cacheVariables": {
+                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin"
             }
         },
         {
@@ -43,7 +46,8 @@
             "inherits": "ninja",
             "toolchainFile": "${sourceDir}/toolchainFile/gcc.cmake",
             "cacheVariables": {
-                "USE_IMPORT_STD": "OFF"
+                "USE_IMPORT_STD": "OFF",
+                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
             },
             "environment": {
                 "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"

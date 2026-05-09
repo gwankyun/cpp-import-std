@@ -64,41 +64,25 @@ target_compile_features(main PRIVATE cxx_std_23)
 include(cmake/target_copy_files.cmake) # target_copy_files
 include(cmake/clang.cmake) # clang_generate_clangd
 
-set(files "")
-
-include(cmake/target_copy_files.cmake) # target_copy_files
-
-# 使用 clang 編譯器()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
-
-  set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
-
-  list(APPEND files "${dll_files}")
-endif()
-
-# 使用 gcc 編譯器
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  cmake_path(SET gcc_bin NORMALIZE "$ENV{MINGW64_ROOT}/bin")
-
-  set(
-    dll_files
-    "${gcc_bin}/libgcc_s_seh-1.dll"
-    "${gcc_bin}/libstdc++-6.dll"
-    "${gcc_bin}/libwinpthread-1.dll"
-  )
-
-  list(APPEND files "${dll_files}")
-endif()
-
-target_copy_files(
-  TARGET main
-  FILES "${files}"
-)
-
 # 啟用測試
 enable_testing()
 include(CTest)
 
 # main返回0就是成功
 add_test(NAME tests COMMAND main)
+
+# 複製運行文件
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+  set(apps "$<TARGET_FILE:main>;$<TARGET_FILE:main>")
+  set(dirs "${COMPILER_BIN}")
+  cmake_path(NORMAL_PATH dirs)
+
+  install(
+    CODE
+      "
+  set(apps \"${apps}\")
+  set(dirs \"${dirs}\")
+  include(\"${CMAKE_SOURCE_DIR}/cmake/bundle.cmake\")
+"
+  )
+endif()

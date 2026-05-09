@@ -28,3 +28,8 @@ target_sources(
 )
 target_compile_features(compiler PRIVATE cxx_std_23)
 target_link_libraries(compiler PRIVATE import_std_option)
+
+# install(SCRIPT "${CMAKE_SOURCE_DIR}/bundle.cmake"
+#   DESTINATION "."
+#   COMPONENT Runtime
+# )
