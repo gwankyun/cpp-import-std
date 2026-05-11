@@ -55,7 +55,7 @@ target_sources(
   PRIVATE #
     src/main.cpp
 )
-target_link_libraries(main PRIVATE compiler import_std_option) # 鏈接compiler庫
+target_link_libraries(main PRIVATE compiler::compiler import_std_option) # 鏈接compiler庫
 target_compile_features(main PRIVATE cxx_std_23)
 
 # 按目標不啟用標準庫模塊，取消下行注释在Clang下就會報fatal error: module 'std' not found
@@ -71,18 +71,26 @@ include(CTest)
 # main返回0就是成功
 add_test(NAME tests COMMAND main)
 
-# 複製運行文件
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-  set(apps "$<TARGET_FILE:main>;$<TARGET_FILE:main>")
-  set(dirs "${COMPILER_BIN}")
-  cmake_path(NORMAL_PATH dirs)
+set(dirs "${COMPILER_BIN}")
+cmake_path(NORMAL_PATH dirs)
 
-  install(
-    CODE
-      "
-  set(apps \"${apps}\")
-  set(dirs \"${dirs}\")
-  include(\"${CMAKE_SOURCE_DIR}/cmake/bundle.cmake\")
-"
+# 複製運行時文件
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+  add_custom_command(
+    TARGET main
+    POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND}
+      # gersemi: off
+      -D apps="$<TARGET_FILE:main>"
+      -D dirs="${dirs}"
+      # gersemi: on
+      -P "${CMAKE_SOURCE_DIR}/cmake/bundle.cmake"
+    COMMENT ""
   )
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  # 生成.clangd配置文件
+  clang_generate_clangd(generate_clangd)
 endif()

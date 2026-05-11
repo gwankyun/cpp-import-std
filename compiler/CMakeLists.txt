@@ -9,9 +9,9 @@ configure_file(
 # gersemi: on
 
 # 添加庫
-add_library(compiler)
+add_library(compiler_module)
 target_sources(
-  compiler
+  compiler_module
   PUBLIC # 對外接口單元需要公開
     FILE_SET CXX_MODULES
       BASE_DIRS
@@ -26,10 +26,7 @@ target_sources(
       BASE_DIRS ${CMAKE_BINARY_DIR}
       FILES "${compiler_info_h}"
 )
-target_compile_features(compiler PRIVATE cxx_std_23)
-target_link_libraries(compiler PRIVATE import_std_option)
+target_compile_features(compiler_module PRIVATE cxx_std_23)
+target_link_libraries(compiler_module PRIVATE import_std_option)
 
-# install(SCRIPT "${CMAKE_SOURCE_DIR}/bundle.cmake"
-#   DESTINATION "."
-#   COMPONENT Runtime
-# )
+add_library(compiler::compiler ALIAS compiler_module) 
