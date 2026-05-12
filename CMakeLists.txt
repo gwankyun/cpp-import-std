@@ -35,14 +35,18 @@ project(
 )
 
 # 全局启用標準庫模塊
-enable_module_std(ON)
+if(USE_IMPORT_STD_UUID STREQUAL "ON")
+  enable_module_std(ON)
+endif()
 
 cmake_print_variables(USE_IMPORT_STD)
 
 add_library(import_std_option INTERFACE)
 target_compile_definitions(
   import_std_option
-  INTERFACE USE_IMPORT_STD=$<BOOL:${USE_IMPORT_STD}>
+  INTERFACE
+    USE_IMPORT_STD=$<BOOL:${USE_IMPORT_STD}>
+    USE_MODULE=$<BOOL:${USE_MODULE}>
 )
 
 # 添加庫

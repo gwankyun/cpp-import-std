@@ -10,8 +10,6 @@ export module compiler; // 注意這裡有export
 import std;
 #endif
 
-export namespace compiler
-{
-    std::string id();
-    std::string version();
-}
+#define COMPILER_USE_MODULE
+
+#include "compiler.h"

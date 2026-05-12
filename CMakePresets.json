@@ -6,6 +6,7 @@
             "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
+                "USE_MODULE": "ON",
                 "USE_IMPORT_STD_UUID": "ON",
                 "USE_IMPORT_STD": "ON"
             }
@@ -52,6 +53,17 @@
             "environment": {
                 "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
             }
+        },
+        {
+            "name": "clangcl",
+            "inherits": "msvc",
+            "description": "Clang CL (Visual Studio)",
+            "toolset": "ClangCL",
+            "cacheVariables": {
+                "USE_MODULE": "OFF",
+                "USE_IMPORT_STD_UUID": "OFF",
+                "USE_IMPORT_STD": "OFF"
+            }
         }
     ],
     "buildPresets": [
@@ -69,6 +81,11 @@
             "name": "gcc",
             "configurePreset": "gcc",
             "configuration": "Debug"
+        },
+        {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
+            "configuration": "Debug"
         }
     ],
     "testPresets": [
@@ -85,6 +102,11 @@
         {
             "name": "gcc",
             "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
             "configuration": "Debug"
         }
     ]

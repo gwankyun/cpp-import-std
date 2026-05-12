@@ -8,25 +8,64 @@ configure_file(
 )
 # gersemi: on
 
-# 添加庫
-add_library(compiler_module)
+add_library(compiler_base INTERFACE)
 target_sources(
-  compiler_module
-  PUBLIC # 對外接口單元需要公開
-    FILE_SET CXX_MODULES
-      BASE_DIRS
-        src # 模塊根目錄，讓編譯器找到模塊接口
-      FILES
-        src/compiler.ixx # 模塊接口單元
-  PRIVATE
-    src/compiler.cpp # 模塊實現單元
-  PRIVATE
-    FILE_SET
-      HEADERS #
+  compiler_base
+  INTERFACE src/compiler_impl.hpp
+  INTERFACE
+    FILE_SET compiler_base_h
+      TYPE HEADERS
       BASE_DIRS ${CMAKE_BINARY_DIR}
       FILES "${compiler_info_h}"
 )
-target_compile_features(compiler_module PRIVATE cxx_std_23)
-target_link_libraries(compiler_module PRIVATE import_std_option)
+add_library(compiler::base ALIAS compiler_base)
 
-add_library(compiler::compiler ALIAS compiler_module) 
+# 添加庫
+if(USE_MODULE STREQUAL "ON")
+  add_library(compiler_module)
+  target_sources(
+    compiler_module
+    PUBLIC # 對外接口單元需要公開
+      FILE_SET CXX_MODULES
+        BASE_DIRS
+          src # 模塊根目錄，讓編譯器找到模塊接口
+        FILES
+          src/compiler.ixx # 模塊接口單元
+    PRIVATE
+      src/compiler.cpp # 模塊實現單元
+      src/compiler.h # 模塊接口單元
+  )
+  target_compile_features(compiler_module PRIVATE cxx_std_23)
+  target_link_libraries(
+    compiler_module
+    PRIVATE #
+      import_std_option
+      compiler::base
+  )
+endif()
+
+if((USE_MODULE STREQUAL "OFF") OR ON)
+  add_library(compiler_header)
+  target_sources(
+    compiler_header
+    PUBLIC
+      FILE_SET
+        HEADERS #
+        BASE_DIRS src
+        FILES src/compiler.h
+    PRIVATE src/compiler_header.cpp
+  )
+  target_compile_features(compiler_header PRIVATE cxx_std_23)
+  target_link_libraries(
+    compiler_header
+    PRIVATE #
+      import_std_option
+      compiler::base
+  )
+endif()
+
+if(USE_MODULE STREQUAL "ON")
+  add_library(compiler::compiler ALIAS compiler_module)
+else()
+  add_library(compiler::compiler ALIAS compiler_header)
+endif()

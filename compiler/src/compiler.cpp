@@ -11,15 +11,6 @@ module compiler; // 注意這裡無export
 import std;
 #endif
 
-namespace compiler
-{
-    std::string id()
-    {
-        return CXX_COMPILER_ID;
-    }
+#define COMPILER_USE_MODULE
 
-    std::string version()
-    {
-        return CXX_COMPILER_VERSION;
-    }
-} // namespace compiler
+#include "compiler_impl.hpp"
