@@ -109,5 +109,39 @@
             "configurePreset": "clangcl",
             "configuration": "Debug"
         }
+    ],
+    "workflowPresets": [
+        {
+            "name": "msvc",
+            "steps": [
+                { "type": "configure", "name": "msvc" },
+                { "type": "build", "name": "msvc" },
+                { "type": "test", "name": "msvc" }
+            ]
+        },
+        {
+            "name": "clang",
+            "steps": [
+                { "type": "configure", "name": "clang" },
+                { "type": "build", "name": "clang" },
+                { "type": "test", "name": "clang" }
+            ]
+        },
+        {
+            "name": "clangcl",
+            "steps": [
+                { "type": "configure", "name": "clangcl" },
+                { "type": "build", "name": "clangcl" },
+                { "type": "test", "name": "clangcl" }
+            ]
+        },
+        {
+            "name": "gcc",
+            "steps": [
+                { "type": "configure", "name": "gcc" },
+                { "type": "build", "name": "gcc" },
+                { "type": "test", "name": "gcc" }
+            ]
+        }
     ]
 }
