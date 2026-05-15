@@ -42,30 +42,32 @@ if(USE_MODULE STREQUAL "ON")
       import_std_option
       compiler::base
   )
+  add_library(compiler::module ALIAS compiler_module)
 endif()
 
 if((USE_MODULE STREQUAL "OFF") OR ON)
-  add_library(compiler_header)
+  add_library(compiler_legacy)
   target_sources(
-    compiler_header
+    compiler_legacy
     PUBLIC
       FILE_SET
         HEADERS #
         BASE_DIRS src
         FILES src/compiler.h
-    PRIVATE src/compiler_header.cpp
+    PRIVATE src/compiler_legacy.cpp
   )
-  target_compile_features(compiler_header PRIVATE cxx_std_23)
+  target_compile_features(compiler_legacy PRIVATE cxx_std_23)
   target_link_libraries(
-    compiler_header
+    compiler_legacy
     PRIVATE #
       import_std_option
       compiler::base
   )
+  add_library(compiler::legacy ALIAS compiler_legacy)
 endif()
 
 if(USE_MODULE STREQUAL "ON")
   add_library(compiler::compiler ALIAS compiler_module)
 else()
-  add_library(compiler::compiler ALIAS compiler_header)
+  add_library(compiler::compiler ALIAS compiler_legacy)
 endif()

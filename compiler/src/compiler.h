@@ -1,4 +1,6 @@
-﻿#ifndef COMPILER_USE_MODULE
+﻿#pragma once
+
+#ifndef COMPILER_USE_MODULE
 #include <string>
 #define COMPILER_EXPORT
 #else
@@ -10,3 +12,5 @@ COMPILER_EXPORT namespace compiler
     std::string id();
     std::string version();
 } // namespace compiler
+
+#undef COMPILER_EXPORT

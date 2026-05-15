@@ -9,6 +9,15 @@ cmake_print_variables(USE_IMPORT_STD_UUID)
 # get_import_std enable_module_std target_enable_module_std
 include(cmake/cxx_module.cmake)
 
+if(USE_MODULE STREQUAL "OFF")
+  set(USE_IMPORT_STD "OFF")
+  set(USE_EXPORT_IMPORT_HEADER "OFF")
+endif()
+
+if(USE_IMPORT_STD STREQUAL "OFF")
+  set(USE_IMPORT_STD_UUID "OFF")
+endif()
+
 # CMake對Clang的import std;支持還在試驗階段
 if(USE_IMPORT_STD_UUID STREQUAL "ON")
   # 需要設置此UUID
@@ -47,6 +56,7 @@ target_compile_definitions(
   INTERFACE
     USE_IMPORT_STD=$<BOOL:${USE_IMPORT_STD}>
     USE_MODULE=$<BOOL:${USE_MODULE}>
+    USE_EXPORT_IMPORT_HEADER=$<BOOL:${USE_EXPORT_IMPORT_HEADER}>
 )
 
 # 添加庫

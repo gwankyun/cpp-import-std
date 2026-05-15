@@ -7,8 +7,9 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "USE_MODULE": "ON",
-                "USE_IMPORT_STD_UUID": "ON",
-                "USE_IMPORT_STD": "ON"
+                "USE_IMPORT_STD_UUID": "OFF",
+                "USE_IMPORT_STD": "ON",
+                "USE_EXPORT_IMPORT_HEADER": "OFF"
             }
         },
         {
@@ -26,10 +27,7 @@
             "inherits": "base",
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
-            "architecture": "x64",
-            "cacheVariables": {
-                "USE_IMPORT_STD_UUID": "OFF"
-            }
+            "architecture": "x64"
         },
         {
             "name": "clang",
@@ -60,9 +58,7 @@
             "description": "Clang CL (Visual Studio)",
             "toolset": "ClangCL",
             "cacheVariables": {
-                "USE_MODULE": "OFF",
-                "USE_IMPORT_STD_UUID": "OFF",
-                "USE_IMPORT_STD": "OFF"
+                "USE_MODULE": "OFF"
             }
         }
     ],

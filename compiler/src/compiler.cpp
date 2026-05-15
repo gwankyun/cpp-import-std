@@ -12,5 +12,5 @@ import std;
 #endif
 
 #define COMPILER_USE_MODULE
-
 #include "compiler_impl.hpp"
+#undef COMPILER_USE_MODULE
