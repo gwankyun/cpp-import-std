@@ -37,7 +37,8 @@
                 "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
             },
             "cacheVariables": {
-                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin"
+                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
+                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
             }
         },
         {

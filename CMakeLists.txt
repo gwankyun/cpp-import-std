@@ -43,6 +43,9 @@ project(
   DESCRIPTION "在msvc及clang下使用import std;"
 )
 
+cmake_print_variables(CMAKE_CXX_COMPILER_ID)
+cmake_print_variables(CMAKE_CXX_COMPILER_FRONTEND_VARIANT)
+
 # 全局启用標準庫模塊
 if(USE_IMPORT_STD_UUID STREQUAL "ON")
   enable_module_std(ON)
@@ -89,7 +92,7 @@ set(dirs "${COMPILER_BIN}")
 cmake_path(NORMAL_PATH dirs)
 
 # 複製運行時文件
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
   add_custom_command(
     TARGET main
     POST_BUILD
@@ -98,13 +101,17 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
       # gersemi: off
       -D apps="$<TARGET_FILE:main>"
       -D dirs="${dirs}"
+      "$<$<BOOL:${CMAKE_OBJDUMP}>:-D CMAKE_OBJDUMP=${CMAKE_OBJDUMP}>"
       # gersemi: on
       -P "${CMAKE_SOURCE_DIR}/cmake/bundle.cmake"
     COMMENT ""
   )
 endif()
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if(
+  (CMAKE_CXX_COMPILER_ID STREQUAL "Clang") #
+  AND (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+)
   # 生成.clangd配置文件
   clang_generate_clangd(generate_clangd)
 endif()
