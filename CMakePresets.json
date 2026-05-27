@@ -1,8 +1,18 @@
 ﻿{
-    "version": 9,
+    "version": 10,
     "configurePresets": [
         {
+            "name": "graphviz",
+            "hidden": true,
+            "graphviz": "${sourceDir}/graphviz/${presetName}.dot"
+        },
+        {
+            "name": "no-graphviz",
+            "hidden": true
+        },
+        {
             "name": "base",
+            "inherits": "no-graphviz",
             "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
