@@ -1,77 +1,7 @@
 ﻿{
     "version": 10,
-    "configurePresets": [
-        {
-            "name": "graphviz",
-            "hidden": true,
-            "graphviz": "${sourceDir}/graphviz/${presetName}.dot"
-        },
-        {
-            "name": "no-graphviz",
-            "hidden": true
-        },
-        {
-            "name": "base",
-            "inherits": "no-graphviz",
-            "hidden": true,
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "USE_MODULE": "ON",
-                "USE_IMPORT_STD_UUID": "OFF",
-                "USE_IMPORT_STD": "ON",
-                "USE_EXPORT_IMPORT_HEADER": "OFF"
-            }
-        },
-        {
-            "name": "ninja",
-            "inherits": "base",
-            "hidden": true,
-            "generator": "Ninja Multi-Config",
-            "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "USE_IMPORT_STD_UUID": "ON"
-            }
-        },
-        {
-            "name": "msvc",
-            "inherits": "base",
-            "description": "Visual Studio 18 2026",
-            "generator": "Visual Studio 18 2026",
-            "architecture": "x64"
-        },
-        {
-            "name": "clang",
-            "inherits": "ninja",
-            "toolchainFile": "${sourceDir}/toolchainFile/clang.cmake",
-            "environment": {
-                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
-            },
-            "cacheVariables": {
-                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
-                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
-            }
-        },
-        {
-            "name": "gcc",
-            "inherits": "ninja",
-            "toolchainFile": "${sourceDir}/toolchainFile/gcc.cmake",
-            "cacheVariables": {
-                "USE_IMPORT_STD": "OFF",
-                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
-            },
-            "environment": {
-                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
-            }
-        },
-        {
-            "name": "clangcl",
-            "inherits": "msvc",
-            "description": "Clang CL (Visual Studio)",
-            "toolset": "ClangCL",
-            "cacheVariables": {
-                "USE_MODULE": "OFF"
-            }
-        }
+    "include": [
+        "presets/configure.json"
     ],
     "buildPresets": [
         {

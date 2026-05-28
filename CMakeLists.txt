@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.30) # std模塊支持
 include(CMakePrintHelpers)
 
 cmake_print_variables(CMAKE_VERSION)
+cmake_print_variables(USE_MODULE)
 cmake_print_variables(USE_IMPORT_STD_UUID)
 
 # get_import_std enable_module_std target_enable_module_std
