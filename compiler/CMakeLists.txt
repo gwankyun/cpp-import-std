@@ -34,6 +34,7 @@ if(USE_MODULE STREQUAL "ON")
     PRIVATE
       src/compiler.cpp # 模塊實現單元
       src/compiler.h # 模塊接口單元
+      src/compiler_impl.hpp # 模塊實現單元
   )
   target_compile_features(compiler_module PRIVATE cxx_std_23)
   target_link_libraries(

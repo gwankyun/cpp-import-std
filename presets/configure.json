@@ -62,7 +62,10 @@
         },
         {
             "name": "gcc",
-            "inherits": ["use-import-std-disable", "ninja"],
+            "inherits": [
+                "use-import-std-disable",
+                "ninja"
+            ],
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
                 "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe",
@@ -74,9 +77,30 @@
         },
         {
             "name": "clangcl",
-            "inherits": ["use-module-disable", "msvc"],
-            "description": "Clang CL (Visual Studio)",
+            "inherits": [
+                "use-module-disable",
+                "use-import-std-disable",
+                "msvc"
+            ],
+            "description": "Clang CL (Visual Studio, no modules)",
             "toolset": "ClangCL"
+        },
+        {
+            "name": "clangcl-ninja",
+            "inherits": [
+                "use-import-std-disable",
+                "ninja"
+            ],
+            "description": "Clang CL (Ninja, with modules)",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "$env{VS_CLANG_ROOT}/bin/clang-cl.exe",
+                "CMAKE_CXX_COMPILER": "$env{VS_CLANG_ROOT}/bin/clang-cl.exe",
+                "CMAKE_LINKER": "$env{VS_CLANG_ROOT}/bin/lld-link.exe",
+                "CMAKE_AR": "$env{VS_CLANG_ROOT}/bin/llvm-lib.exe"
+            },
+            "environment": {
+                "PATH": "$env{VS_CLANG_ROOT}/bin;$penv{PATH}"
+            }
         }
     ]
 }

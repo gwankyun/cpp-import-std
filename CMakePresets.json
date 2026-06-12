@@ -23,6 +23,11 @@
             "name": "clangcl",
             "configurePreset": "clangcl",
             "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-ninja",
+            "configurePreset": "clangcl-ninja",
+            "configuration": "Debug"
         }
     ],
     "testPresets": [
@@ -44,6 +49,11 @@
         {
             "name": "clangcl",
             "configurePreset": "clangcl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-ninja",
+            "configurePreset": "clangcl-ninja",
             "configuration": "Debug"
         }
     ],
@@ -70,6 +80,14 @@
                 { "type": "configure", "name": "clangcl" },
                 { "type": "build", "name": "clangcl" },
                 { "type": "test", "name": "clangcl" }
+            ]
+        },
+        {
+            "name": "clangcl-ninja",
+            "steps": [
+                { "type": "configure", "name": "clangcl-ninja" },
+                { "type": "build", "name": "clangcl-ninja" },
+                { "type": "test", "name": "clangcl-ninja" }
             ]
         },
         {

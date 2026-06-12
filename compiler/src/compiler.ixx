@@ -10,7 +10,7 @@ export module compiler; // 注意這裡有export
 import std;
 #endif
 
-#if defined(_MSC_VER) || USE_EXPORT_IMPORT_HEADER
+#if (defined(_MSC_VER) && !defined(__clang__)) || USE_EXPORT_IMPORT_HEADER
 export import "compiler.h";
 #else
 #define COMPILER_USE_MODULE

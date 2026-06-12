@@ -13,6 +13,7 @@ import compiler;
 #define CHECK(_cond) \
     if (!(_cond)) \
     { \
+        std::cout << "error on: " << __LINE__ << std::endl; \
         return 1; \
     }
 
@@ -20,7 +21,7 @@ int test()
 {
 #if defined(__clang__) && defined(_MSC_VER)
     CHECK(compiler::id() == "Clang");
-    CHECK(!USE_MODULE);
+    CHECK(USE_MODULE);
     CHECK(!USE_IMPORT_STD);
 #elif defined(_MSC_VER)
     CHECK(compiler::id() == "MSVC");

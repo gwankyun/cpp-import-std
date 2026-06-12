@@ -1,5 +1,5 @@
 ﻿# cmake版本
-cmake_minimum_required(VERSION 3.30) # std模塊支持
+cmake_minimum_required(VERSION 4.4) # std模塊支持
 
 include(CMakePrintHelpers)
 
@@ -46,6 +46,7 @@ project(
 
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 cmake_print_variables(CMAKE_CXX_COMPILER_FRONTEND_VARIANT)
+cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 
 # 全局启用標準庫模塊
 if(USE_IMPORT_STD_UUID STREQUAL "ON")
