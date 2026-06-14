@@ -6,6 +6,7 @@ include(CMakePrintHelpers)
 cmake_print_variables(CMAKE_VERSION)
 cmake_print_variables(USE_MODULE)
 cmake_print_variables(USE_IMPORT_STD_UUID)
+cmake_print_variables(USE_NINJA)
 
 # get_import_std enable_module_std target_enable_module_std
 include(cmake/cxx_module.cmake)
@@ -62,6 +63,7 @@ target_compile_definitions(
     USE_IMPORT_STD=$<BOOL:${USE_IMPORT_STD}>
     USE_MODULE=$<BOOL:${USE_MODULE}>
     USE_EXPORT_IMPORT_HEADER=$<BOOL:${USE_EXPORT_IMPORT_HEADER}>
+    USE_NINJA=$<BOOL:${USE_NINJA}>
 )
 
 # 添加庫

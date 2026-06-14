@@ -15,17 +15,20 @@
                 "USE_MODULE": "ON",
                 "USE_IMPORT_STD_UUID": "OFF",
                 "USE_IMPORT_STD": "ON",
-                "USE_EXPORT_IMPORT_HEADER": "OFF"
+                "USE_EXPORT_IMPORT_HEADER": "OFF",
+                "USE_NINJA": "OFF"
             }
         },
         {
             "name": "use-module-disable",
+            "hidden": true,
             "cacheVariables": {
                 "USE_MODULE": "OFF"
             }
         },
         {
             "name": "use-import-std-disable",
+            "hidden": true,
             "cacheVariables": {
                 "USE_IMPORT_STD": "OFF"
             }
@@ -37,7 +40,8 @@
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "USE_IMPORT_STD_UUID": "ON"
+                "USE_IMPORT_STD_UUID": "ON",
+                "USE_NINJA": "ON"
             }
         },
         {
@@ -93,13 +97,13 @@
             ],
             "description": "Clang CL (Ninja, with modules)",
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "$env{VS_CLANG_ROOT}/bin/clang-cl.exe",
-                "CMAKE_CXX_COMPILER": "$env{VS_CLANG_ROOT}/bin/clang-cl.exe",
-                "CMAKE_LINKER": "$env{VS_CLANG_ROOT}/bin/lld-link.exe",
-                "CMAKE_AR": "$env{VS_CLANG_ROOT}/bin/llvm-lib.exe"
+                "CMAKE_C_COMPILER": "$env{VS_LLVM_ROOT}/bin/clang-cl.exe",
+                "CMAKE_CXX_COMPILER": "$env{VS_LLVM_ROOT}/bin/clang-cl.exe",
+                "CMAKE_LINKER": "$env{VS_LLVM_ROOT}/bin/lld-link.exe",
+                "CMAKE_AR": "$env{VS_LLVM_ROOT}/bin/llvm-lib.exe"
             },
             "environment": {
-                "PATH": "$env{VS_CLANG_ROOT}/bin;$penv{PATH}"
+                "PATH": "$env{VS_LLVM_ROOT}/bin;$penv{PATH}"
             }
         }
     ]

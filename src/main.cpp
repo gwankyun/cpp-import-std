@@ -21,7 +21,7 @@ int test()
 {
 #if defined(__clang__) && defined(_MSC_VER)
     CHECK(compiler::id() == "Clang");
-    CHECK(USE_MODULE);
+    CHECK(USE_NINJA == USE_MODULE);
     CHECK(!USE_IMPORT_STD);
 #elif defined(_MSC_VER)
     CHECK(compiler::id() == "MSVC");
@@ -42,6 +42,7 @@ int main(int _argc, char* _argv[])
 {
     std::cout << "compiler id     : " << compiler::id() << std::endl;
     std::cout << "compiler version: " << compiler::version() << std::endl;
+    std::cout << "USE_NINJA       : " << USE_NINJA << std::endl;
     std::cout << "USE_MODULE      : " << USE_MODULE << std::endl;
     std::cout << "USE_IMPORT_STD  : " << USE_IMPORT_STD << std::endl;
 
