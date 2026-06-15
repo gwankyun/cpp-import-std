@@ -98,9 +98,7 @@
             "description": "Clang CL (Ninja, with modules)",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "$env{VS_LLVM_ROOT}/bin/clang-cl.exe",
-                "CMAKE_CXX_COMPILER": "$env{VS_LLVM_ROOT}/bin/clang-cl.exe",
-                "CMAKE_LINKER": "$env{VS_LLVM_ROOT}/bin/lld-link.exe",
-                "CMAKE_AR": "$env{VS_LLVM_ROOT}/bin/llvm-lib.exe"
+                "CMAKE_CXX_COMPILER": "$env{VS_LLVM_ROOT}/bin/clang-cl.exe"
             },
             "environment": {
                 "PATH": "$env{VS_LLVM_ROOT}/bin;$penv{PATH}"
