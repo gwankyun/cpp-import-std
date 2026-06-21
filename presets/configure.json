@@ -16,7 +16,8 @@
                 "USE_IMPORT_STD_UUID": "OFF",
                 "USE_IMPORT_STD": "ON",
                 "USE_EXPORT_IMPORT_HEADER": "OFF",
-                "USE_NINJA": "OFF"
+                "USE_NINJA": "OFF",
+                "USE_TRY_COMPILE": "ON"
             }
         },
         {
