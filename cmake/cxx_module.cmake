@@ -9,7 +9,7 @@ endfunction()
 # 全局啟用標準庫模塊
 function(enable_module_std enable_std)
   # 檢查當前C++編譯器是否為Clang或GNU
-  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU" AND NOT CMAKE_GENERATOR MATCHES "Visual Studio")
     set(CMAKE_CXX_MODULE_STD ${enable_std} PARENT_SCOPE)
   endif()
 endfunction()
@@ -20,16 +20,16 @@ function(get_import_std result)
   set(import_std_330 "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
   set(import_std_400 "a9e1cf81-9932-4810-974b-6eccaf14e457")
   set(import_std_410 "d0edc3af-4c50-42ea-a356-e2862fe7a444")
-  set(import_std_430 "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
+  set(import_std_440 "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
   set(ver ${CMAKE_VERSION})
 
-  if(${ver} VERSION_GREATER_EQUAL "4.4.0") # >= 4.4.0
+  if(${ver} VERSION_GREATER_EQUAL "4.5.0") # >= 4.5.0
     message(WARNING "CMAKE_VERSION ${ver} not tested")
-    set(uuid "${import_std_430}")
-  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0" AND ${ver} VERSION_LESS "4.4.0") # >= 4.3.0  && < 4.4.0
-    set(uuid "${import_std_430}")
+    set(uuid "${import_std_440}")
+  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0" AND ${ver} VERSION_LESS "4.5.0") # >= 4.3.0  && < 4.5.0
+    set(uuid "${import_std_440}") # [4.3.0, 4.5.0)有效
   elseif(${ver} VERSION_GREATER_EQUAL "4.1.0" AND ${ver} VERSION_LESS "4.3.0") # >= 4.1.0  && < 4.3.0
-    set(uuid "${import_std_410}") # 衹保證在[4.1.0, 4.2.0]有效
+    set(uuid "${import_std_410}") # [4.1.0, 4.3.0)有效
   elseif(${ver} VERSION_GREATER_EQUAL "4.0.0" AND ${ver} VERSION_LESS "4.1.0") # >= 4.0.0  && < 4.1.0
     set(uuid "${import_std_400}") # [4.0.0, 4.1.0)有效
   elseif(${ver} VERSION_GREATER_EQUAL "3.30.0" AND ${ver} VERSION_LESS "4.0.0") # >= 3.30.0 && < 4.0.0
@@ -39,4 +39,64 @@ function(get_import_std result)
   endif()
 
   set(${result} "${uuid}" PARENT_SCOPE)
+endfunction()
+
+function(check_module_support result_var)
+  list(
+    APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+    CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
+    CMAKE_CXX_MODULE_STD
+    CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
+  )
+
+  try_compile(
+    ${result_var}
+    SOURCES_TYPE CXX_MODULE
+    SOURCE_FROM_CONTENT
+      test_module.ixx
+      [=[
+      export module test_module;
+      export int test_add(int a, int b)
+      {
+          return a + b;
+      }
+      ]=]
+    SOURCES_TYPE NORMAL
+    SOURCE_FROM_CONTENT
+      main.cpp
+      [=[
+      import test_module;
+      int main()
+      {
+          return test_add(1, 2) - 3;
+      }
+      ]=]
+    CXX_STANDARD 23
+  )
+  set(${result_var} ${${result_var}} PARENT_SCOPE)
+endfunction()
+
+function(check_import_std_support result_var)
+  list(
+    APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+    CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
+    CMAKE_CXX_MODULE_STD
+    CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
+  )
+
+  try_compile(
+    ${result_var}
+    SOURCE_FROM_CONTENT
+      main.cpp
+      [=[
+      import std;
+      int main()
+      {
+          std::cout << 0 << std::endl;
+          return 0;
+      }
+      ]=]
+    CXX_STANDARD 23
+  )
+  set(${result_var} ${${result_var}} PARENT_SCOPE)
 endfunction()

@@ -10,6 +10,7 @@ cmake_print_variables(USE_NINJA)
 cmake_print_variables(USE_TRY_COMPILE)
 
 # get_import_std enable_module_std target_enable_module_std
+# check_module_support check_import_std_support
 include(cmake/cxx_module.cmake)
 
 if(USE_MODULE STREQUAL "OFF")
@@ -56,30 +57,7 @@ endif()
 cmake_print_variables(USE_IMPORT_STD)
 
 if(USE_TRY_COMPILE STREQUAL "ON")
-  try_compile(
-    test_module_result
-    SOURCES_TYPE CXX_MODULE
-    SOURCE_FROM_CONTENT
-      test_module.ixx
-      [=[
-      export module test_module;
-      export int test_add(int a, int b)
-      {
-          return a + b;
-      }
-      ]=]
-    SOURCES_TYPE NORMAL
-    SOURCE_FROM_CONTENT
-      main.cpp
-      [=[
-      import test_module;
-      int main()
-      {
-          return test_add(1, 2) - 3;
-      }
-      ]=]
-    CXX_STANDARD 23
-  )
+  check_module_support(test_module_result)
   cmake_print_variables(test_module_result)
   if(test_module_result STREQUAL "TRUE")
     set(USE_MODULE "ON")
@@ -87,27 +65,7 @@ if(USE_TRY_COMPILE STREQUAL "ON")
     set(USE_MODULE "OFF")
   endif()
 
-  list(
-    APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
-    CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
-    CMAKE_CXX_MODULE_STD
-    CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
-  )
-
-  try_compile(
-    test_import_std_result
-    SOURCE_FROM_CONTENT
-      main.cpp
-      [=[
-      import std;
-      int main()
-      {
-          std::cout << 0 << std::endl;
-          return 0;
-      }
-      ]=]
-    CXX_STANDARD 23
-  )
+  check_import_std_support(test_import_std_result)
   cmake_print_variables(test_import_std_result)
   if(test_import_std_result STREQUAL "TRUE")
     set(USE_IMPORT_STD "ON")
