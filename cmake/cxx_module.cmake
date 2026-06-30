@@ -24,19 +24,19 @@ function(get_import_std result)
   set(import_std_440 "f35a9ac6-8463-4d38-8eec-5d6008153e7d")
   set(ver ${CMAKE_VERSION})
 
-  if(${ver} VERSION_GREATER_EQUAL "4.5.0") # >= 4.5.0
+  if(${ver} VERSION_GREATER "4.4.0-rc3")
     message(WARNING "CMAKE_VERSION ${ver} not tested")
     set(uuid "${import_std_440}")
-  elseif(${ver} VERSION_GREATER_EQUAL "4.4.0" AND ${ver} VERSION_LESS "4.5.0") # >= 4.4.0  && < 4.5.0
-    set(uuid "${import_std_440}") # [4.4.0, 4.5.0)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0" AND ${ver} VERSION_LESS "4.4.0") # >= 4.3.0  && < 4.4.0
-    set(uuid "${import_std_430}") # [4.3.0, 4.4.0)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.1.0" AND ${ver} VERSION_LESS "4.3.0") # >= 4.1.0  && < 4.3.0
-    set(uuid "${import_std_410}") # [4.1.0, 4.3.0)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.0.0" AND ${ver} VERSION_LESS "4.1.0") # >= 4.0.0  && < 4.1.0
-    set(uuid "${import_std_400}") # [4.0.0, 4.1.0)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "3.30.0" AND ${ver} VERSION_LESS "4.0.0") # >= 3.30.0 && < 4.0.0
-    set(uuid "${import_std_330}") # [3.30, 4.0.0)有效
+  elseif(${ver} VERSION_EQUAL "4.4.0-rc3")
+    set(uuid "${import_std_440}") # 4.4.0-rc3有效
+  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0-rc1" AND ${ver} VERSION_LESS "4.4.0-rc3")
+    set(uuid "${import_std_430}") # [4.3.0-rc1, 4.4.0-rc3)有效
+  elseif(${ver} VERSION_GREATER_EQUAL "4.1.0-rc1" AND ${ver} VERSION_LESS "4.3.0-rc1")
+    set(uuid "${import_std_410}") # [4.1.0-rc1, 4.3.0-rc1)有效
+  elseif(${ver} VERSION_GREATER_EQUAL "4.0.0-rc1" AND ${ver} VERSION_LESS "4.1.0-rc1")
+    set(uuid "${import_std_400}") # [4.0.0-rc1, 4.1.0-rc1)有效
+  elseif(${ver} VERSION_GREATER_EQUAL "3.30.0-rc1" AND ${ver} VERSION_LESS "4.0.0-rc1")
+    set(uuid "${import_std_330}") # [3.30-rc1, 4.0.0-rc1)有效
   else()
     message(FATAL_ERROR "CMAKE_VERSION ${ver} not supported")
   endif()
