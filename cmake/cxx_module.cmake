@@ -24,18 +24,25 @@ function(get_import_std result)
   set(import_std_440 "f35a9ac6-8463-4d38-8eec-5d6008153e7d")
   set(ver ${CMAKE_VERSION})
 
-  if(${ver} VERSION_GREATER "4.4.0-rc3")
+  set(v330_rc1 "3.30.0-rc1")
+  set(v400_rc1 "4.0.0-rc1")
+  set(v410_rc1 "4.1.0-rc1")
+  set(v430_rc1 "4.3.0-rc1")
+  set(v440_rc3 "4.4.0-rc3")
+  set(v440 "4.4.0")
+
+  if(${ver} VERSION_GREATER ${v440})
     message(WARNING "CMAKE_VERSION ${ver} not tested")
     set(uuid "${import_std_440}")
-  elseif(${ver} VERSION_EQUAL "4.4.0-rc3")
-    set(uuid "${import_std_440}") # 4.4.0-rc3有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.3.0-rc1" AND ${ver} VERSION_LESS "4.4.0-rc3")
+  elseif(${ver} VERSION_EQUAL ${v440_rc3} AND ${ver} VERSION_LESS_EQUAL ${v440})
+    set(uuid "${import_std_440}") # [4.4.0-rc3, 4.4.0]有效
+  elseif(${ver} VERSION_GREATER_EQUAL ${v430_rc1} AND ${ver} VERSION_LESS ${v440_rc3})
     set(uuid "${import_std_430}") # [4.3.0-rc1, 4.4.0-rc3)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.1.0-rc1" AND ${ver} VERSION_LESS "4.3.0-rc1")
+  elseif(${ver} VERSION_GREATER_EQUAL ${v410_rc1} AND ${ver} VERSION_LESS ${v430_rc1})
     set(uuid "${import_std_410}") # [4.1.0-rc1, 4.3.0-rc1)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "4.0.0-rc1" AND ${ver} VERSION_LESS "4.1.0-rc1")
+  elseif(${ver} VERSION_GREATER_EQUAL ${v400_rc1} AND ${ver} VERSION_LESS ${v410_rc1})
     set(uuid "${import_std_400}") # [4.0.0-rc1, 4.1.0-rc1)有效
-  elseif(${ver} VERSION_GREATER_EQUAL "3.30.0-rc1" AND ${ver} VERSION_LESS "4.0.0-rc1")
+  elseif(${ver} VERSION_GREATER_EQUAL ${v330_rc1} AND ${ver} VERSION_LESS ${v400_rc1})
     set(uuid "${import_std_330}") # [3.30-rc1, 4.0.0-rc1)有效
   else()
     message(FATAL_ERROR "CMAKE_VERSION ${ver} not supported")
@@ -100,6 +107,23 @@ function(check_import_std_support result_var)
       }
       ]=]
     CXX_STANDARD 23
+  )
+  set(${result_var} ${${result_var}} PARENT_SCOPE)
+endfunction()
+
+function(check_export_import_header_support result_var)
+  list(
+    APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+    CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
+    CMAKE_CXX_MODULE_STD
+    CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS
+  )
+
+  try_compile(
+    ${result_var}
+    PROJECT check_export_import_header
+    SOURCE_DIR "${CMAKE_SOURCE_DIR}/cmake/checks/export-import-header"
+    BINARY_DIR "${CMAKE_BINARY_DIR}/CMakeFiles/TryCompile-export-import-header"
   )
   set(${result_var} ${${result_var}} PARENT_SCOPE)
 endfunction()

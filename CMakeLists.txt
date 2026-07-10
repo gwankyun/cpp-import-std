@@ -1,5 +1,5 @@
 ﻿# cmake版本
-cmake_minimum_required(VERSION 4.4) # std模塊支持
+cmake_minimum_required(VERSION 3.30...4.4) # std模塊支持
 
 include(CMakePrintHelpers)
 
@@ -45,9 +45,17 @@ project(
   DESCRIPTION "在msvc及clang下使用import std;"
 )
 
+cmake_print_variables(CMAKE_SYSTEM)
+cmake_print_variables(CMAKE_SYSTEM_NAME)
+cmake_print_variables(CMAKE_SYSTEM_VERSION)
+cmake_print_variables(CMAKE_SYSTEM_PROCESSOR)
+
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 cmake_print_variables(CMAKE_CXX_COMPILER_FRONTEND_VARIANT)
 cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
+
+cmake_print_variables(CMAKE_GENERATOR)
+cmake_print_variables(CMAKE_GENERATOR_INSTANCE)
 
 # 全局启用標準庫模塊
 if(USE_IMPORT_STD_UUID STREQUAL "ON")
@@ -72,6 +80,18 @@ if(USE_TRY_COMPILE STREQUAL "ON")
   else()
     set(USE_IMPORT_STD "OFF")
   endif()
+
+  check_export_import_header_support(test_export_import_header_result)
+  cmake_print_variables(test_export_import_header_result)
+  if(test_export_import_header_result STREQUAL "TRUE")
+    set(USE_EXPORT_IMPORT_HEADER "ON")
+  else()
+    set(USE_EXPORT_IMPORT_HEADER "OFF")
+  endif()
+endif()
+
+if(USE_MODULE STREQUAL "OFF")
+  set(USE_EXPORT_IMPORT_HEADER "OFF")
 endif()
 
 add_library(import_std_option INTERFACE)
