@@ -12,6 +12,8 @@ cmake_print_variables(USE_TRY_COMPILE)
 # get_import_std enable_module_std target_enable_module_std
 # check_module_support check_import_std_support
 include(cmake/cxx_module.cmake)
+# add_bundle_command
+include(cmake/bundle.cmake)
 
 if(USE_MODULE STREQUAL "OFF")
   set(USE_IMPORT_STD "OFF")
@@ -23,18 +25,15 @@ if(USE_IMPORT_STD STREQUAL "OFF")
 endif()
 
 # CMake對Clang的import std;支持還在試驗階段
-if(USE_IMPORT_STD_UUID STREQUAL "ON")
-  # 需要設置此UUID
-  get_import_std(import_std_uuid)
-  cmake_print_variables(import_std_uuid)
+get_import_std(import_std_uuid)
+cmake_print_variables(import_std_uuid)
 
-  set(
-    CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
-    ${import_std_uuid}
-    CACHE STRING
-    "UUID for import std"
-  )
-endif()
+set(
+  CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
+  ${import_std_uuid}
+  CACHE STRING
+  "UUID for import std"
+)
 
 # 項目名
 project(
@@ -44,6 +43,11 @@ project(
   VERSION 0.1.0 # 版本
   DESCRIPTION "在msvc及clang下使用import std;"
 )
+
+# 全局启用標準庫模塊
+if(USE_IMPORT_STD_UUID STREQUAL "ON")
+  enable_module_std(ON)
+endif()
 
 cmake_print_variables(CMAKE_SYSTEM)
 cmake_print_variables(CMAKE_SYSTEM_NAME)
@@ -56,11 +60,6 @@ cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 
 cmake_print_variables(CMAKE_GENERATOR)
 cmake_print_variables(CMAKE_GENERATOR_INSTANCE)
-
-# 全局启用標準庫模塊
-if(USE_IMPORT_STD_UUID STREQUAL "ON")
-  enable_module_std(ON)
-endif()
 
 cmake_print_variables(USE_IMPORT_STD)
 
@@ -130,30 +129,8 @@ include(CTest)
 # main返回0就是成功
 add_test(NAME tests COMMAND main)
 
-set(dirs "${COMPILER_BIN}")
-cmake_path(NORMAL_PATH dirs)
-
 # 複製運行時文件
-if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
-  add_custom_command(
-    TARGET main
-    POST_BUILD
-    COMMAND
-      ${CMAKE_COMMAND}
-      # gersemi: off
-      -D apps="$<TARGET_FILE:main>"
-      -D dirs="${dirs}"
-      "$<$<BOOL:${CMAKE_OBJDUMP}>:-D CMAKE_OBJDUMP=${CMAKE_OBJDUMP}>"
-      # gersemi: on
-      -P "${CMAKE_SOURCE_DIR}/cmake/bundle.cmake"
-    COMMENT ""
-  )
-endif()
+add_bundle_command(TARGET main)
 
-if(
-  (CMAKE_CXX_COMPILER_ID STREQUAL "Clang") #
-  AND (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
-)
-  # 生成.clangd配置文件
-  clang_generate_clangd(generate_clangd)
-endif()
+# 生成.clangd配置文件
+clang_generate_clangd(generate_clangd)
