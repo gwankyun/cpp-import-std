@@ -30,7 +30,7 @@ int test()
 #elif defined(__GNUC__)
     CHECK(compiler::id() == "GNU");
     CHECK(USE_MODULE);
-    CHECK(!USE_IMPORT_STD);
+    CHECK(USE_IMPORT_STD);
 #else
     return 1;
 #endif

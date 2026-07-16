@@ -7,47 +7,31 @@ cmake_print_variables(CMAKE_VERSION)
 cmake_print_variables(USE_MODULE)
 cmake_print_variables(USE_IMPORT_STD_UUID)
 cmake_print_variables(USE_NINJA)
+
+if(DEFINED ENV{USE_TRY_COMPILE})
+  set(USE_TRY_COMPILE "$ENV{USE_TRY_COMPILE}")
+elseif(NOT DEFINED USE_TRY_COMPILE)
+  set(USE_TRY_COMPILE OFF)
+endif()
+
 cmake_print_variables(USE_TRY_COMPILE)
 
-# get_import_std enable_module_std target_enable_module_std
+# enable_module_std target_enable_module_std
 # check_module_support check_import_std_support
+# check_export_import_header_support
+# precompile_std_gcm
 include(cmake/cxx_module.cmake)
-# add_bundle_command
-include(cmake/bundle.cmake)
 
-if(USE_MODULE STREQUAL "OFF")
-  set(USE_IMPORT_STD "OFF")
-  set(USE_EXPORT_IMPORT_HEADER "OFF")
-endif()
-
-if(USE_IMPORT_STD STREQUAL "OFF")
-  set(USE_IMPORT_STD_UUID "OFF")
-endif()
-
-# CMake對Clang的import std;支持還在試驗階段
-get_import_std(import_std_uuid)
-cmake_print_variables(import_std_uuid)
-
-set(
-  CMAKE_EXPERIMENTAL_CXX_IMPORT_STD
-  ${import_std_uuid}
-  CACHE STRING
-  "UUID for import std"
-)
+# 全局啟用標準庫模塊（enable_module_std內部會判斷MSVC/clang-cl自動設OFF）
+enable_module_std(ON)
 
 # 項目名
 project(
   cpp_import_std
-  # 以下屬性皆可選
-  LANGUAGES CXX # 指定C++可以跳過C編譯器檢測
-  VERSION 0.1.0 # 版本
+  LANGUAGES CXX
+  VERSION 0.1.0
   DESCRIPTION "在msvc及clang下使用import std;"
 )
-
-# 全局启用標準庫模塊
-if(USE_IMPORT_STD_UUID STREQUAL "ON")
-  enable_module_std(ON)
-endif()
 
 cmake_print_variables(CMAKE_SYSTEM)
 cmake_print_variables(CMAKE_SYSTEM_NAME)
@@ -61,37 +45,32 @@ cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 cmake_print_variables(CMAKE_GENERATOR)
 cmake_print_variables(CMAKE_GENERATOR_INSTANCE)
 
+# GCC需要預編譯std.gcm才能使用import std
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND USE_IMPORT_STD)
+  precompile_std_gcm(precompile_ok)
+  if(NOT precompile_ok)
+    set(USE_IMPORT_STD OFF)
+  endif()
+endif()
+
+# try_compile檢測編譯器實際支持能力
+if(USE_TRY_COMPILE)
+  check_module_support(USE_MODULE)
+  check_import_std_support(USE_IMPORT_STD)
+  check_export_import_header_support(USE_EXPORT_IMPORT_HEADER)
+endif()
+
+# 約束邏輯：模塊關→import_std關→export_import_header關
+if(NOT USE_MODULE)
+  set(USE_IMPORT_STD OFF)
+  set(USE_EXPORT_IMPORT_HEADER OFF)
+endif()
+
+if(NOT USE_IMPORT_STD)
+  set(USE_IMPORT_STD_UUID OFF)
+endif()
+
 cmake_print_variables(USE_IMPORT_STD)
-
-if(USE_TRY_COMPILE STREQUAL "ON")
-  check_module_support(test_module_result)
-  cmake_print_variables(test_module_result)
-  if(test_module_result STREQUAL "TRUE")
-    set(USE_MODULE "ON")
-  else()
-    set(USE_MODULE "OFF")
-  endif()
-
-  check_import_std_support(test_import_std_result)
-  cmake_print_variables(test_import_std_result)
-  if(test_import_std_result STREQUAL "TRUE")
-    set(USE_IMPORT_STD "ON")
-  else()
-    set(USE_IMPORT_STD "OFF")
-  endif()
-
-  check_export_import_header_support(test_export_import_header_result)
-  cmake_print_variables(test_export_import_header_result)
-  if(test_export_import_header_result STREQUAL "TRUE")
-    set(USE_EXPORT_IMPORT_HEADER "ON")
-  else()
-    set(USE_EXPORT_IMPORT_HEADER "OFF")
-  endif()
-endif()
-
-if(USE_MODULE STREQUAL "OFF")
-  set(USE_EXPORT_IMPORT_HEADER "OFF")
-endif()
 
 add_library(import_std_option INTERFACE)
 target_compile_definitions(
@@ -119,9 +98,6 @@ target_compile_features(main PRIVATE cxx_std_23)
 # 按目標不啟用標準庫模塊，取消下行注释在Clang下就會報fatal error: module 'std' not found
 # target_enable_module_std(main OFF)
 
-include(cmake/target_copy_files.cmake) # target_copy_files
-include(cmake/clang.cmake) # clang_generate_clangd
-
 # 啟用測試
 enable_testing()
 include(CTest)
@@ -129,8 +105,14 @@ include(CTest)
 # main返回0就是成功
 add_test(NAME tests COMMAND main)
 
+# add_bundle_command
+include(cmake/bundle.cmake)
+
 # 複製運行時文件
 add_bundle_command(TARGET main)
+
+# clang_generate_clangd
+include(cmake/clang.cmake)
 
 # 生成.clangd配置文件
 clang_generate_clangd(generate_clangd)

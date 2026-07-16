@@ -21,7 +21,7 @@ target_sources(
 add_library(compiler::base ALIAS compiler_base)
 
 # 添加庫
-if(USE_MODULE STREQUAL "ON")
+if(USE_MODULE)
   add_library(compiler_module)
   target_sources(
     compiler_module
@@ -46,7 +46,7 @@ if(USE_MODULE STREQUAL "ON")
   add_library(compiler::module ALIAS compiler_module)
 endif()
 
-if((USE_MODULE STREQUAL "OFF") OR ON)
+if((NOT USE_MODULE) OR ON)
   add_library(compiler_legacy)
   target_sources(
     compiler_legacy
@@ -67,7 +67,7 @@ if((USE_MODULE STREQUAL "OFF") OR ON)
   add_library(compiler::legacy ALIAS compiler_legacy)
 endif()
 
-if(USE_MODULE STREQUAL "ON")
+if(USE_MODULE)
   add_library(compiler::compiler ALIAS compiler_module)
 else()
   add_library(compiler::compiler ALIAS compiler_legacy)

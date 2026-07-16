@@ -12,25 +12,32 @@
             "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
-                "USE_MODULE": "ON",
-                "USE_IMPORT_STD_UUID": "OFF",
-                "USE_IMPORT_STD": "ON",
-                "USE_NINJA": "OFF",
-                "USE_TRY_COMPILE": "ON"
+                "USE_MODULE": true,
+                "USE_IMPORT_STD_UUID": true,
+                "USE_IMPORT_STD": true,
+                "USE_NINJA": false,
+                "USE_TRY_COMPILE": true
             }
         },
         {
-            "name": "use-module-disable",
+            "name": "use-module-off",
             "hidden": true,
             "cacheVariables": {
-                "USE_MODULE": "OFF"
+                "USE_MODULE": false
             }
         },
         {
-            "name": "use-import-std-disable",
+            "name": "use-import-std-uuid-off",
             "hidden": true,
             "cacheVariables": {
-                "USE_IMPORT_STD": "OFF"
+                "USE_IMPORT_STD_UUID": false
+            }
+        },
+        {
+            "name": "use-import-std-off",
+            "hidden": true,
+            "cacheVariables": {
+                "USE_IMPORT_STD": false
             }
         },
         {
@@ -39,14 +46,17 @@
             "hidden": true,
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "USE_IMPORT_STD_UUID": "ON",
-                "USE_NINJA": "ON"
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "USE_IMPORT_STD_UUID": true,
+                "USE_NINJA": true
             }
         },
         {
             "name": "msvc",
-            "inherits": "base",
+            "inherits": [
+                "use-import-std-uuid-off",
+                "base"
+            ],
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
             "architecture": "x64"
@@ -60,20 +70,17 @@
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
-                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
                 "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
             }
         },
         {
             "name": "gcc",
             "inherits": [
-                "use-import-std-disable",
                 "ninja"
             ],
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe",
-                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
+                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
             },
             "environment": {
                 "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
@@ -82,8 +89,8 @@
         {
             "name": "clangcl",
             "inherits": [
-                "use-module-disable",
-                "use-import-std-disable",
+                "use-module-off",
+                "use-import-std-off",
                 "msvc"
             ],
             "description": "Clang CL (Visual Studio, no modules)",
@@ -92,7 +99,7 @@
         {
             "name": "clangcl-ninja",
             "inherits": [
-                "use-import-std-disable",
+                "use-import-std-off",
                 "ninja"
             ],
             "description": "Clang CL (Ninja, with modules)",
