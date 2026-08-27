@@ -108,7 +108,7 @@ function(get_import_std result)
   set(v410_rc1 "4.1.0-rc1")
   set(v430_rc1 "4.3.0-rc1")
   set(v440_rc3 "4.4.0-rc3")
-  set(v_lastest "4.4.2")
+  set(v_lastest "4.4.3")
 
   if(${ver} VERSION_GREATER ${v_lastest})
     message(WARNING "CMAKE_VERSION ${ver} not tested")

@@ -29,8 +29,8 @@ enable_module_std(ON)
 project(
   cpp_import_std
   LANGUAGES CXX
-  VERSION 0.1.0
-  DESCRIPTION "在msvc及clang下使用import std;"
+  VERSION 0.1.1
+  DESCRIPTION "在msvc、clang及gcc下使用import std;"
 )
 
 cmake_print_variables(CMAKE_SYSTEM)
