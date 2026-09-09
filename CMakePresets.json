@@ -1,61 +1,9 @@
 ﻿{
     "version": 10,
     "include": [
-        "presets/configure.json"
-    ],
-    "buildPresets": [
-        {
-            "name": "msvc",
-            "configurePreset": "msvc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang",
-            "configurePreset": "clang",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc",
-            "configurePreset": "gcc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl",
-            "configurePreset": "clangcl",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-ninja",
-            "configurePreset": "clangcl-ninja",
-            "configuration": "Debug"
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "msvc",
-            "configurePreset": "msvc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang",
-            "configurePreset": "clang",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc",
-            "configurePreset": "gcc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl",
-            "configurePreset": "clangcl",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-ninja",
-            "configurePreset": "clangcl-ninja",
-            "configuration": "Debug"
-        }
+        "presets/configure.json",
+        "presets/build.json",
+        "presets/test.json"
     ],
     "workflowPresets": [
         {
@@ -64,6 +12,14 @@
                 { "type": "configure", "name": "msvc" },
                 { "type": "build", "name": "msvc" },
                 { "type": "test", "name": "msvc" }
+            ]
+        },
+        {
+            "name": "msvc-ninja",
+            "steps": [
+                { "type": "configure", "name": "msvc-ninja" },
+                { "type": "build", "name": "msvc-ninja" },
+                { "type": "test", "name": "msvc-ninja" }
             ]
         },
         {

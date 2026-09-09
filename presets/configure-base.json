@@ -1,0 +1,125 @@
+{
+    "version": 10,
+    "configurePresets": [
+        {
+            "name": "graphviz",
+            "hidden": true,
+            "graphviz": "${sourceDir}/graphviz/${presetName}.dot"
+        },
+        {
+            "name": "base",
+            "inherits": [],
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "USE_MODULE": true,
+                "USE_IMPORT_STD_UUID": true,
+                "USE_IMPORT_STD": true,
+                "USE_NINJA": false,
+                "USE_TRY_COMPILE": true
+            }
+        },
+        {
+            "name": "use-module-off",
+            "hidden": true,
+            "cacheVariables": {
+                "USE_MODULE": false
+            }
+        },
+        {
+            "name": "use-import-std-uuid-off",
+            "hidden": true,
+            "cacheVariables": {
+                "USE_IMPORT_STD_UUID": false
+            }
+        },
+        {
+            "name": "use-import-std-off",
+            "hidden": true,
+            "cacheVariables": {
+                "USE_IMPORT_STD": false
+            }
+        },
+        {
+            "name": "use-ninja-on",
+            "hidden": true,
+            "cacheVariables": {
+                "USE_NINJA": true
+            }
+        },
+        {
+            "name": "ninja",
+            "inherits": [
+                "use-ninja-on",
+                "base"
+            ],
+            "hidden": true,
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
+        },
+        {
+            "name": "msvc-base",
+            "hidden": true,
+            "inherits": [
+                "use-import-std-uuid-off",
+                "base"
+            ],
+            "description": "Visual Studio 18 2026",
+            "generator": "Visual Studio 18 2026",
+            "architecture": "x64"
+        },
+        {
+            "name": "clang-base",
+            "hidden": true,
+            "inherits": "ninja",
+            "environment": {
+                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
+                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
+            }
+        },
+        {
+            "name": "gcc-base",
+            "hidden": true,
+            "inherits": [
+                "ninja"
+            ],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
+                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
+            },
+            "environment": {
+                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
+            }
+        },
+        {
+            "name": "clangcl-base",
+            "hidden": true,
+            "inherits": [
+                "use-module-off",
+                "use-import-std-off",
+                "msvc-base"
+            ],
+            "description": "Clang CL (Visual Studio, no modules)",
+            "toolset": "ClangCL"
+        },
+        {
+            "name": "clangcl-ninja-base",
+            "hidden": true,
+            "inherits": [
+                "use-import-std-off",
+                "ninja"
+            ],
+            "description": "Clang CL (Ninja, with modules)",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl.exe",
+                "CMAKE_CXX_COMPILER": "clang-cl.exe"
+            }
+        }
+    ]
+}

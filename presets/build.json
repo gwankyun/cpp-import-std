@@ -1,0 +1,38 @@
+﻿{
+    "version": 10,
+    "include": [
+        "configure.json"
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-ninja",
+            "configurePreset": "msvc-ninja",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang",
+            "configurePreset": "clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-ninja",
+            "configurePreset": "clangcl-ninja",
+            "configuration": "Debug"
+        }
+    ]
+}
