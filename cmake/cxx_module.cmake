@@ -1,5 +1,10 @@
 ﻿# 為目標啟用標準庫模塊
 function(target_enable_module_std tgt enable_std)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5.0)
+    # CMake 4.5 起 import std 已轉正，不再有 CXX_MODULE_STD 屬性
+    return()
+  endif()
+
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     set_target_properties(${tgt} PROPERTIES CXX_MODULE_STD ${enable_std})
   endif()
@@ -7,12 +12,18 @@ endfunction()
 
 # 全局啟用標準庫模塊
 function(enable_module_std enable_std)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5.0)
+    # CMake 4.5 起 import std 已轉正，不再需要實驗性 UUID：
+    # C++20 及以上 + CXX_SCAN_FOR_MODULES（默認開啟）即可使用。
+    return()
+  endif()
+
   if(CMAKE_CXX_COMPILER MATCHES "clang-cl" OR CMAKE_GENERATOR MATCHES "Visual Studio")
     set(enable_std OFF)
   endif()
 
   get_import_std(import_std_uuid)
-  cmake_print_variables(import_std_uuid)
+  print_variables(import_std_uuid)
 
   set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ${import_std_uuid} PARENT_SCOPE)
   set(CMAKE_CXX_MODULE_STD ${enable_std} PARENT_SCOPE)
@@ -94,6 +105,22 @@ function(precompile_std_gcm result_var)
   endif()
 endfunction()
 
+# 把版本號轉成可直接用 VERSION_* 比較的四段數字：
+#   4.5.0-rc1        -> 4.5.0.1
+#   4.5.0            -> 4.5.0.99999   （正式版 > 任何 rc）
+#   4.5.20250901-gxx -> 4.5.20250901.0（開發版後綴當作最低）
+function(rc_to_version4 version out)
+  if("${version}" MATCHES "^([0-9]+([.][0-9]+)*)-rc([0-9]+)$")
+    set(${out} "${CMAKE_MATCH_1}.${CMAKE_MATCH_3}" PARENT_SCOPE)
+  elseif("${version}" MATCHES "^([0-9]+([.][0-9]+)*)$")
+    set(${out} "${CMAKE_MATCH_1}.99999" PARENT_SCOPE)
+  elseif("${version}" MATCHES "^([0-9]+([.][0-9]+)*)-(.+)$")
+    set(${out} "${CMAKE_MATCH_1}.0" PARENT_SCOPE)
+  else()
+    set(${out} "${version}" PARENT_SCOPE)
+  endif()
+endfunction()
+
 function(get_import_std result)
   set(uuid "")
   set(import_std_330 "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
@@ -108,20 +135,30 @@ function(get_import_std result)
   set(v410_rc1 "4.1.0-rc1")
   set(v430_rc1 "4.3.0-rc1")
   set(v440_rc3 "4.4.0-rc3")
-  set(v_lastest "4.4.4")
+  set(v_lastest "4.5.0-rc1")
 
-  if(${ver} VERSION_GREATER ${v_lastest})
-    message(WARNING "CMAKE_VERSION ${ver} not tested")
+  # VERSION_* 會截斷 -rcN 後綴（如 4.5.0-rc1 被當作 4.5.0），
+  # 先轉成四段數字，让 rc 邊界真正參與比較
+  rc_to_version4("${ver}"       ver_key)
+  rc_to_version4("${v330_rc1}"  key_330)     # 3.30.0.1
+  rc_to_version4("${v400_rc1}"  key_400)     # 4.0.0.1
+  rc_to_version4("${v410_rc1}"  key_410)     # 4.1.0.1
+  rc_to_version4("${v430_rc1}"  key_430)     # 4.3.0.1
+  rc_to_version4("${v440_rc3}"  key_440)     # 4.4.0.3
+  rc_to_version4("${v_lastest}" key_latest)  # 4.5.0.1
+
+  if(ver_key VERSION_GREATER key_latest)
+    # message(WARNING "CMAKE_VERSION ${ver} not tested")
     set(uuid "${import_std_440}")
-  elseif(${ver} VERSION_GREATER_EQUAL ${v440_rc3} AND ${ver} VERSION_LESS_EQUAL ${v_lastest})
+  elseif(ver_key VERSION_GREATER_EQUAL key_440 AND ver_key VERSION_LESS_EQUAL key_latest)
     set(uuid "${import_std_440}")
-  elseif(${ver} VERSION_GREATER_EQUAL ${v430_rc1} AND ${ver} VERSION_LESS ${v440_rc3})
+  elseif(ver_key VERSION_GREATER_EQUAL key_430 AND ver_key VERSION_LESS key_440)
     set(uuid "${import_std_430}")
-  elseif(${ver} VERSION_GREATER_EQUAL ${v410_rc1} AND ${ver} VERSION_LESS ${v430_rc1})
+  elseif(ver_key VERSION_GREATER_EQUAL key_410 AND ver_key VERSION_LESS key_430)
     set(uuid "${import_std_410}")
-  elseif(${ver} VERSION_GREATER_EQUAL ${v400_rc1} AND ${ver} VERSION_LESS ${v410_rc1})
+  elseif(ver_key VERSION_GREATER_EQUAL key_400 AND ver_key VERSION_LESS key_410)
     set(uuid "${import_std_400}")
-  elseif(${ver} VERSION_GREATER_EQUAL ${v330_rc1} AND ${ver} VERSION_LESS ${v400_rc1})
+  elseif(ver_key VERSION_GREATER_EQUAL key_330 AND ver_key VERSION_LESS key_400)
     set(uuid "${import_std_330}")
   else()
     message(FATAL_ERROR "CMAKE_VERSION ${ver} not supported")

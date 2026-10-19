@@ -1,13 +1,23 @@
-include(CMakePrintHelpers)
+# 兼容的變量打印：CMake >= 4.5 用 cmake_language，舊版退回 CMakePrintHelpers
+function(print_variables)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5)
+    cmake_language(PRINT_VARIABLES NAMED ${ARGV})
+  else()
+    include(CMakePrintHelpers)
+    cmake_print_variables(${ARGV})
+  endif()
+endfunction()
 
-cmake_print_variables(SOURCE_DIR)
-cmake_print_variables(BINARY_DIR)
-cmake_print_variables(CONFIG)
+print_variables(
+  SOURCE_DIR
+  BINARY_DIR
+  CONFIG
+  )
 
 # 讀預設.clangd文件
 file(READ "${SOURCE_DIR}/cmake/.clangd" clang_d)
 
-cmake_print_variables(clang_d)
+print_variables(clang_d)
 
 # 查找${CONFIG}配置下的所有.pcm文件
 file(GLOB_RECURSE pcm_file_list "${BINARY_DIR}/**/*.pcm")

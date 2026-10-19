@@ -22,7 +22,7 @@ int test()
 #if defined(__clang__) && defined(_MSC_VER)
     CHECK(compiler::id() == "Clang");
     CHECK(USE_NINJA == USE_MODULE);
-    CHECK(!USE_IMPORT_STD);
+    CHECK(USE_NINJA == USE_IMPORT_STD);
 #elif defined(_MSC_VER)
     CHECK(compiler::id() == "MSVC");
 #elif defined(__clang__)

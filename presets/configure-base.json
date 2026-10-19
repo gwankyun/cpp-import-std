@@ -112,10 +112,9 @@
             "name": "clangcl-ninja-base",
             "hidden": true,
             "inherits": [
-                "use-import-std-off",
                 "ninja"
             ],
-            "description": "Clang CL (Ninja, with modules)",
+            "description": "Clang CL (Ninja, with modules and import std)",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang-cl.exe",
                 "CMAKE_CXX_COMPILER": "clang-cl.exe"

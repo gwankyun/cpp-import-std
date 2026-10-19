@@ -1,12 +1,22 @@
 ﻿# cmake版本
-cmake_minimum_required(VERSION 3.30...4.4) # std模塊支持
+cmake_minimum_required(VERSION 3.30...4.5) # std模塊支持
 
-include(CMakePrintHelpers)
+# 兼容的變量打印：CMake >= 4.5 用 cmake_language，舊版退回 CMakePrintHelpers
+function(print_variables)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5)
+    cmake_language(PRINT_VARIABLES NAMED ${ARGV})
+  else()
+    include(CMakePrintHelpers)
+    cmake_print_variables(${ARGV})
+  endif()
+endfunction()
 
-cmake_print_variables(CMAKE_VERSION)
-cmake_print_variables(USE_MODULE)
-cmake_print_variables(USE_IMPORT_STD_UUID)
-cmake_print_variables(USE_NINJA)
+print_variables(
+  CMAKE_VERSION
+  USE_MODULE
+  USE_IMPORT_STD_UUID
+  USE_NINJA
+  )
 
 if(DEFINED ENV{USE_TRY_COMPILE})
   set(USE_TRY_COMPILE "$ENV{USE_TRY_COMPILE}")
@@ -14,7 +24,7 @@ elseif(NOT DEFINED USE_TRY_COMPILE)
   set(USE_TRY_COMPILE OFF)
 endif()
 
-cmake_print_variables(USE_TRY_COMPILE)
+print_variables(USE_TRY_COMPILE)
 
 # enable_module_std target_enable_module_std
 # check_module_support check_import_std_support
@@ -33,17 +43,23 @@ project(
   DESCRIPTION "在msvc、clang及gcc下使用import std;"
 )
 
-cmake_print_variables(CMAKE_SYSTEM)
-cmake_print_variables(CMAKE_SYSTEM_NAME)
-cmake_print_variables(CMAKE_SYSTEM_VERSION)
-cmake_print_variables(CMAKE_SYSTEM_PROCESSOR)
+print_variables(
+  CMAKE_SYSTEM
+  CMAKE_SYSTEM_NAME
+  CMAKE_SYSTEM_VERSION
+  CMAKE_SYSTEM_PROCESSOR
+  )
 
-cmake_print_variables(CMAKE_CXX_COMPILER_ID)
-cmake_print_variables(CMAKE_CXX_COMPILER_FRONTEND_VARIANT)
-cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
+print_variables(
+  CMAKE_CXX_COMPILER_ID
+  CMAKE_CXX_COMPILER_FRONTEND_VARIANT
+  CMAKE_CXX_COMPILER_VERSION
+  )
 
-cmake_print_variables(CMAKE_GENERATOR)
-cmake_print_variables(CMAKE_GENERATOR_INSTANCE)
+print_variables(
+  CMAKE_GENERATOR
+  CMAKE_GENERATOR_INSTANCE
+  )
 
 # GCC需要預編譯std.gcm才能使用import std
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND USE_IMPORT_STD)
@@ -70,7 +86,7 @@ if(NOT USE_IMPORT_STD)
   set(USE_IMPORT_STD_UUID OFF)
 endif()
 
-cmake_print_variables(USE_IMPORT_STD)
+print_variables(USE_IMPORT_STD)
 
 add_library(import_std_option INTERFACE)
 target_compile_definitions(
