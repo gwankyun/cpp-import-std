@@ -1,12 +1,5 @@
-# 兼容的變量打印：CMake >= 4.5 用 cmake_language，舊版退回 CMakePrintHelpers
-function(print_variables)
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5)
-    cmake_language(PRINT_VARIABLES NAMED ${ARGV})
-  else()
-    include(CMakePrintHelpers)
-    cmake_print_variables(${ARGV})
-  endif()
-endfunction()
+# print_variables
+include("${CMAKE_CURRENT_LIST_DIR}/print_variables.cmake")
 
 print_variables(
   SOURCE_DIR

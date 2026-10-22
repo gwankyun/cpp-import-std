@@ -35,6 +35,11 @@ function(precompile_std_gcm result_var)
     return()
   endif()
 
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5.0)
+    set(${result_var} TRUE PARENT_SCOPE)
+    return()
+  endif()
+
   if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.2)
     execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libstdc++.modules.json

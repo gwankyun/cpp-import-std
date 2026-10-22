@@ -1,15 +1,8 @@
 ﻿# cmake版本
 cmake_minimum_required(VERSION 3.30...4.5) # std模塊支持
 
-# 兼容的變量打印：CMake >= 4.5 用 cmake_language，舊版退回 CMakePrintHelpers
-function(print_variables)
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.5)
-    cmake_language(PRINT_VARIABLES NAMED ${ARGV})
-  else()
-    include(CMakePrintHelpers)
-    cmake_print_variables(${ARGV})
-  endif()
-endfunction()
+# print_variables
+include(cmake/print_variables.cmake)
 
 print_variables(
   CMAKE_VERSION
@@ -74,6 +67,11 @@ if(USE_TRY_COMPILE)
   check_module_support(USE_MODULE)
   check_import_std_support(USE_IMPORT_STD)
   check_export_import_header_support(USE_EXPORT_IMPORT_HEADER)
+  print_variables(
+    USE_MODULE
+    USE_IMPORT_STD
+    USE_EXPORT_IMPORT_HEADER
+  )
 endif()
 
 # 約束邏輯：模塊關→import_std關→export_import_header關
